@@ -3,18 +3,28 @@ var downloader = require('./downloader');
 
 var serverport = 8000;
 
-var app = express.createServer();
+// Path to public directory
+var pub = __dirname + '/public';
+
+var app = express.createServer(
+        // Auto-compile sass to css with "compiler"
+        // and then serve with connect's staticProvider
+        express.compiler({ src: pub, enable: ['sass'] }),
+        express.staticProvider(pub)
+        );
+
+app.set('views', __dirname + '/views');
+
+
 app.use(express.bodyDecoder());
 
+// Set default template engine to "jade"
+app.set('view engine', 'jade');
+
+
 app.get('/', function(request, response) {
-        response.send(
-            '<h1>File Downloader</h1><br>'
-            + '<form action="/" method="POST">'
-            + 'Type in the URL of the file you want to download:'
-            + '<input id="URLTextbox" name="URL" type="text"></input>'
-            + '<input type="submit"></input>'
-            + '</form>');
-        });
+        response.render('index');
+});
 
 app.post('/', function(request, response) {
         console.log("Received request to download file: " + request.body.URL);
