@@ -1,0 +1,7 @@
+- if (hasMessages)
+  - types.forEach(function(type){
+    div.flash.=type
+      - type.forEach(function(msg){
+        msg
+      - })
+  - })

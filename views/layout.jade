@@ -1,7 +1,28 @@
 !!!
 html
   head
-    title Web Downloader
-    link(rel="stylesheet", href="/stylesheets/style.css")
-  body!= body
+    title= title
 
+    meta(name: "description", content: description)
+    meta(name: "author", content: author)
+    meta(name: "viewport", content: "width=device-width; initial-scale=1.0; maximum-scale=1.0;")
+
+    //// Place favicon.ico and apple-touch-icon.png in the root of your domain and delete these references
+    link(rel: "shortcut icon", href: "/favicon.ico")
+    link(rel: "apple-touch-icon", href: "/apple-touch-icon.png")
+
+    link(rel: "stylesheet", href: "/css/blueprint/screen.css")
+    link(rel: "stylesheet", href: "/css/style.css")
+    // For the less-enabled mobile browsers like Opera Mini
+    link(rel: "stylesheet", media: "handheld", href: "/css/handheld.css")
+
+    //All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects
+    script(type: "text/javascript", src: "js/modernizr-1.5.min.js")
+
+  body
+    #container
+      #header
+        !=partial('_header')
+      #main
+        != body
+      #footer
