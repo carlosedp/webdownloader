@@ -32,8 +32,6 @@ server.dynamicHelpers(require('./helpers.js').dynamicHelpers);
 //server.error(function(err, req, res, next){
         //if (err instanceof NotFound) {
             //res.render('404', { locals: {
-                //header: '#Header#',
-                //footer: '#Footer#',
                 //title : '404 - Not Found',
                 //description: '',
                 //author: '',
@@ -41,8 +39,6 @@ server.dynamicHelpers(require('./helpers.js').dynamicHelpers);
             //},status: 404 });
         //} else {
             //res.render('500', { locals: {
-                //header: '#Header#',
-                //footer: '#Footer#',
                 //title : 'The Server Encountered an Error',
                 //description: '',
                 //author: '',
@@ -51,43 +47,6 @@ server.dynamicHelpers(require('./helpers.js').dynamicHelpers);
             //},status: 500 });
         //}
 //});
-
-// Dynamic helpers are functions which are executed
-// on each view render, unless dynamicHelpers is false.
-
-// So for example we do not need to call messages() in our
-// template, "messages" will be populated with the return
-// value of this function.
-
-//server.dynamicHelpers({
-    //messages: function(req, res){
-        //// In the case of flash messages
-        //// we return a function, allowing
-        //// flash messages to only be flushed
-        //// when called, otherwise every request
-        //// will flush flash messages regardless.
-        //return function(){
-            //// Grab the flash messages
-            //var messages = req.flash();
-            //// We will render the "messages" partial
-            //return res.partial('messages', {
-                //// Our target object is our messages
-                //object: messages,
-                //// We want it to be named "types" in the partial
-                //// since they are keyed like this:
-                //// { info: ['foo'], error: ['bar']}
-                //as: 'types',
-                //// Pass a local named "hasMessages" so we can easily
-                //// check if we have any messages at all
-                //locals: { hasMessages: Object.keys(messages).length },
-                //// We dont want dynamicHelpers in this partial, as
-                //// it would cause infinite recursion
-                //dynamicHelpers: false
-            //});
-        //}
-    //}
-//});
-
 
 server.listen(port);
 
@@ -99,9 +58,6 @@ server.listen(port);
 server.get('/', function(request, response) {
     response.render('index', {
         locals: {
-            //header: '#Header#',
-            //footer: '#Footer#',
-            //footer: response.partial('_footer'),
             signedIn: 1,
             title: 'Web Downloader',
             description: 'Page Description',
@@ -133,6 +89,5 @@ function NotFound(msg){
     Error.call(this, msg);
     Error.captureStackTrace(this, arguments.callee);
 }
-
 
 console.log('Listening on http://0.0.0.0:' + port );
