@@ -2,6 +2,8 @@ var http = require("http");
 var url = require("url");
 var fs = require("fs");
 
+var downloadDir =  __dirname + '/downloadedFiles/';
+
 exports.DownloadFile = function (requestUrl) {
     var host = url.parse(requestUrl).hostname;
     var filename = url.parse(requestUrl).pathname.split("/").pop();
@@ -19,7 +21,7 @@ exports.DownloadFile = function (requestUrl) {
 
 
     request.addListener('response', function (response) {
-            var downloadfile = fs.createWriteStream(filename, {'flags': 'a'});
+            var downloadfile = fs.createWriteStream(downloadDir + filename, {'flags': 'a'});
             console.log("File size " + filename + ": " + response.headers['content-length'] + " bytes.");
             response.addListener('data', function (chunk) {
                 dlprogress += chunk.length;
