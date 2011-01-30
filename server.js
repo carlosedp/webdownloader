@@ -81,7 +81,7 @@ server.post('/', function(request, response) {
             console.log("Invalid Email");
         } else {
             request.flash('info', 'Download scheduled');
-            downloader.DownloadFile(request.body.download);
+            downloader.scheduleDownload(request.body.download);
         }
     }
     response.redirect('back');

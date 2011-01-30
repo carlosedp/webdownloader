@@ -1,19 +1,39 @@
 var http = require("http");
 var url = require("url");
 var fs = require("fs");
-var sys = require("sys");
 
 var downloadDir =  __dirname + '/downloadedFiles/';
 
+var checkFileSize = function (requestUrl) {
+    var host = url.parse(requestUrl).hostname;
+    var filename = url.parse(requestUrl).pathname.split("/").pop();
+    var theurl = http.createClient(80, host);
+    var download = 0;
+    console.log("Checking file size: " + filename);
+    var request = theurl.request('HEAD', requestUrl, {"host": host});  
+    request.end();
+    
+    request.on('response', function(response) {
+        var filesize = response.headers['content-length'];
+        console.log("File size " + filename + ": " + filesize + " bytes.");
+        if (filesize >= 50000) {
+            console.log("Download cancelled. File too big.");
+            download = 0;
+        } else {
+            console.log("Download will continue.");
+            download = 1;
+        }
+    });
+    return download;
+};
 
-
-
-exports.DownloadFile = function (requestUrl) {
+var downloadFile = function(requestUrl) {    
     var host = url.parse(requestUrl).hostname;
     var filename = url.parse(requestUrl).pathname.split("/").pop();
     var dlprogress = 0;
 
     var theurl = http.createClient(80, host);
+    
     console.log("Downloading file: " + filename);
     var request = theurl.request('GET', requestUrl, {"host": host});  
 
@@ -22,15 +42,6 @@ exports.DownloadFile = function (requestUrl) {
             }, 1000);
 
     request.on('response', function(response) {
-        var filesize = response.headers['content-length'];
-        console.log("File size " + filename + ": " + filesize + " bytes.");
-        response.pause();
-        if (filesize >= 50000) {
-            // TODO -> Cancel file download
-            console.log("Download cancelled. File too big.");
-        } else {
-            response.resume();
-        }
         var downloadfile = fs.createWriteStream(downloadDir + filename, {'flags': 'a'});
         response.on('data', function (chunk) {
             dlprogress += chunk.length;
@@ -43,4 +54,12 @@ exports.DownloadFile = function (requestUrl) {
         });
     });
     request.end();
+}
+
+exports.scheduleDownload = function(URL) {
+    if (checkFileSize(URL) == 1) {
+        console.log("Download");
+        downloadFile(URL);
+    }
 };
+
