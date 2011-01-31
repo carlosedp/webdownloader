@@ -31,7 +31,7 @@ server.configure(function(){
         server.use(express.bodyDecoder());
         server.use(express.cookieDecoder());
         server.use(express.session({secret: 'secret stuff'}));
-        server.use(express.logger({ format: '\x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :response-time ms' }));
+        server.use(express.logger({ format: '[:date] \x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :response-time ms' }));
         server.use(express.methodOverride());
         server.use(server.router);
         server.use(express.staticProvider(pub));

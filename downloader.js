@@ -4,28 +4,26 @@ var fs = require("fs");
 
 var downloadDir =  __dirname + '/downloadedFiles/';
 
-var checkFileSize = function (requestUrl) {
+var checkFileSize = function(requestUrl) {
     var host = url.parse(requestUrl).hostname;
     var filename = url.parse(requestUrl).pathname.split("/").pop();
     var theurl = http.createClient(80, host);
-    var download = 0;
     console.log("Checking file size: " + filename);
     var request = theurl.request('HEAD', requestUrl, {"host": host});  
     request.end();
-    
+
     request.on('response', function(response) {
         var filesize = response.headers['content-length'];
         console.log("File size " + filename + ": " + filesize + " bytes.");
         if (filesize >= 50000) {
             console.log("Download cancelled. File too big.");
-            download = 0;
+            return 0;
         } else {
             console.log("Download will continue.");
-            download = 1;
+            return 1;
         }
     });
-    return download;
-};
+}
 
 var downloadFile = function(requestUrl) {    
     var host = url.parse(requestUrl).hostname;
@@ -33,13 +31,13 @@ var downloadFile = function(requestUrl) {
     var dlprogress = 0;
 
     var theurl = http.createClient(80, host);
-    
+
     console.log("Downloading file: " + filename);
     var request = theurl.request('GET', requestUrl, {"host": host});  
 
     var downloadId = setInterval(function () {
-            console.log("Download progress for file" + filename + ": " + dlprogress + " bytes");
-            }, 1000);
+        console.log("Download progress for file" + filename + ": " + dlprogress + " bytes");
+    }, 1000);
 
     request.on('response', function(response) {
         var downloadfile = fs.createWriteStream(downloadDir + filename, {'flags': 'a'});
@@ -61,5 +59,5 @@ exports.scheduleDownload = function(URL) {
         console.log("Download");
         downloadFile(URL);
     }
-};
+}
 
