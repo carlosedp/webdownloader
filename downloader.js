@@ -8,7 +8,7 @@ var checkFileSize = function(requestUrl) {
     var host = url.parse(requestUrl).hostname;
     var filename = url.parse(requestUrl).pathname.split("/").pop();
     var theurl = http.createClient(80, host);
-    console.log("Checking file size: " + filename);
+    console.log("Checking file size for: " + filename);
     var request = theurl.request('HEAD', requestUrl, {"host": host});  
     request.end();
 
@@ -55,7 +55,7 @@ var downloadFile = function(requestUrl) {
 }
 
 exports.scheduleDownload = function(URL) {
-    if (checkFileSize(URL) == 1) {
+    if (checkFileSize(URL)) {
         console.log("Download");
         downloadFile(URL);
     }

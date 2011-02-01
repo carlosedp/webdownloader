@@ -1,0 +1,13 @@
+h1 Sign in
+form(method="post", action="/signin")
+  fieldset
+    div.field 
+      label(for="username") Username:
+      br
+      input(type="text", name='username')
+    div.field
+      label(for="password") Password:
+      br
+      input(type="password", name='password')
+    div.actions
+      input(type="submit", value="Sign in")
