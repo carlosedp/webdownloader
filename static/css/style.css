@@ -46,7 +46,7 @@ content {
     padding-right: 20px;
     padding-top: 15px;
     vertical-align: baseline;
-}    
+}
 
 
 content h1 {
@@ -115,11 +115,6 @@ footer {
     margin-right: auto;
 }
 
-			<div class="cta"> 
-				<a href="/register" title="Sign Up for Notifo" class="signup">Sign Up</a> 
-				<p class="big subtle" style="margin-top: 17px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or&nbsp;<a href="/learn_more" title="Learn More about Notifo">Learn More</a></p> 
-			</div> 
-			
 footer nav {
     float: left;
 }
@@ -180,7 +175,7 @@ a.signup {
     -khtml-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.4);
     -o-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.4);
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.4);
-    border: 1px solid #ba6e00; 
+    border: 1px solid #ba6e00;
 }
 
 a.signup:hover {
@@ -230,4 +225,9 @@ a.signup:hover {
       -o-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
       border-color: #824b0a; }
+
+code {
+    font-family: monospace;
+    background: #ccc;
+}
 
