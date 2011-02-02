@@ -1,5 +1,6 @@
 - if (!signedIn)
   h2 Welcome to the Web Downloader
-  a(href="/signup").signup_button.round Sign Up Now!
+  center
+    a(href="/signup").signup Sign Up!
 - else
   !=partial('fileDownload')
