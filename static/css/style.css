@@ -1,21 +1,21 @@
 .container {
-    width: 920px;
+    width: 820px;
 }
 body {
     background: #adf;
     /*font: 12px/1.4 "Helvetica Nueue", "Lucida Grande", Arial, sans-serif;*/
-    font-family: 'Cantarell', arial, serif;
+    font-family: 'Cantarell', "Lucida Grande", Arial, sans-serif;
     font-size: 14px;
 
 }
 header {
-    padding-top: 20px;
+    padding-top: 10px;
 }
 header img {
     padding: 1em;
     background: #fff;
 }
-section {
+content {
     background-attachment: scroll;
     background-clip: padding-box;
     background-color: #E5E3D2;
@@ -32,7 +32,7 @@ section {
     display: block;
     font-size: 120%;
     font-weight: 300;
-    height: 315px;
+    /*height: 315px;*/
     line-height: 22px;
     margin-bottom: 1em;
     /*margin-left: -19px;*/
@@ -49,7 +49,7 @@ section {
 }    
 
 
-section h1 {
+content h1 {
     font-size: 200%;
     font-weight: bold;
 }
@@ -76,7 +76,7 @@ nav {
     background-color: white;
     padding: 0 0.7em;
     white-space: nowrap;
-    font-weight: bold;
+    font-weight: 600;
 }
 nav ul {
     margin: 0;
@@ -88,7 +88,7 @@ nav ul li {
     padding: 0.2em 0.2em;
 }
 nav ul li a {
-    padding: 0 5px;
+    padding: 5px 5px;
 }
 nav ul li a:visited {
     color: #09c;
@@ -114,6 +114,12 @@ footer {
     margin-left: auto;
     margin-right: auto;
 }
+
+			<div class="cta"> 
+				<a href="/register" title="Sign Up for Notifo" class="signup">Sign Up</a> 
+				<p class="big subtle" style="margin-top: 17px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or&nbsp;<a href="/learn_more" title="Learn More about Notifo">Learn More</a></p> 
+			</div> 
+			
 footer nav {
     float: left;
 }
@@ -128,8 +134,8 @@ fieldset {
 
 .field label {
     float: left;
-    width: 120px;
-    margin-top: 6px;
+    width: 170px;
+    margin-top: 8px;
 }
 
 .field input {
@@ -138,43 +144,6 @@ fieldset {
 .actions input {
     margin-top: 20px;
     margin-bottom: 10px;
-}
-
-
-.field_with_errors {
-    margin-top: 10px;
-    padding: 2px;
-    background-color: red;
-    display: table;
-}
-.field_with_errors label {
-    color: #fff;
-}
-#error_explanation {
-    width: 400px;
-    border: 2px solid red;
-    padding: 7px;
-    padding-bottom: 12px;
-    margin-bottom: 20px;
-    background-color: #f0f0f0;
-}
-#error_explanation h2 {
-    text-align: left;
-    font-weight: bold;
-    padding: 5px 5px 5px 15px;
-    font-size: 12px;
-    margin: -7px;
-    background-color: #c00;
-    color: #fff;
-}
-#error_explanation p {
-    color: #333;
-    margin-bottom: 0;
-    padding: 5px;
-}
-#error_explanation ul li {
-    font-size: 12px;
-    list-style: square;
 }
 
 a.signup {
@@ -252,7 +221,7 @@ a.signup:hover {
     outline: medium none;
     padding: 4px 12px 6px;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
-    margin-left: 120px;
+    /*margin-left: 120px;*/
     font-size: 1.15em; }
 .submit_login:hover {
       -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);

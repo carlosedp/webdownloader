@@ -21,9 +21,8 @@ html
     div.container
       header
         !=partial('_header')
-      section.round
-        #main
-          !{flashMessages}
-          != body
+      content.round
+        !{flashMessages}
+        != body
       footer
         !=partial('_footer')
