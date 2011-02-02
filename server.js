@@ -183,6 +183,12 @@ server.get('/signout', function(req, res){
   });
 })
 
+server.get('/signup', function(req, res) {
+  res.render('users/new.jade', {
+    locals: { user: new User() }
+  });
+})
+
 server.post('/submitDownload', restrict, 
         form(
             validate("download").required().isUrl("The download link is invalid.")
