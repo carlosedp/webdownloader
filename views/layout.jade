@@ -8,10 +8,12 @@ html
     meta(name="keywords", content="download remote")
     meta(name="robots", content="noodp,noydir") 
     meta(name="copyright", content="Copyright 2010 to Present")
-    link(rel="stylesheet", href="/css/style.css", type="text/css", media="screen, projection")
+    //link(rel="stylesheet", href="/css/style.css", type="text/css", media="screen, projection")
     //link(rel: "stylesheet", href: "/css/blueprint/screen.css")
     //link(rel="alternate", type="application/rss+xml", title="RSS", href="http://site/rss.xml")
     //script(src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js", type="text/javascript")
+    link(href="/stylesheets/screen.css", media="screen, projection", rel="stylesheet", type="text/css")
+    link(href="/stylesheets/print.css", media="print", rel="stylesheet", type="text/css")
   
     //// Place favicon.ico and apple-touch-icon.png in the root of your domain and delete these references
     link(rel: "shortcut icon", href: "/favicon.ico")
@@ -22,7 +24,7 @@ html
     div#container
       div#header
         !=partial('_header')
-      div#content.round
+      div#content
         !{flashMessages}
         != body
       div#footer

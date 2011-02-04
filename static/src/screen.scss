@@ -1,0 +1,168 @@
+// This import applies a global reset to any page that imports this stylesheet.
+@import "blueprint/reset";
+
+// To configure blueprint, edit the partials/_base.sass file.
+@import "partials/base";
+
+// Import all the default blueprint modules so that we can access their mixins.
+@import "blueprint";
+
+// Import the non-default scaffolding module.
+@import "blueprint/scaffolding";
+
+// Generate the blueprint framework according to your configuration:
+@include blueprint;
+
+@include blueprint-scaffolding;
+
+@import "compass";
+
+@mixin round($radius: 10px) {
+    -moz-border-radius: $radius;
+    -webkit-border-radius: $radius;
+    border-radius: $radius;
+}
+
+html body {
+    background-color: #adf;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1;
+    font-weight: 300;
+    font-family: 'Cantarell', "Helvetica Nueue", "Lucida Grande", Arial, sans-serif;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+#container {
+    width: 820px;
+    margin: 0 auto;
+}
+a {
+    color: #09c;
+    text-decoration: none;
+    &:hover {
+        color: #069;
+        text-decoration: underline;
+    }
+    &:visited {
+        color: #069;
+    }
+}
+
+#header {
+    display: block;
+    padding-top: 10px;
+}
+
+#logo {
+    display: inline-block;
+}
+
+div.nav {
+    display: inline-block;
+    background-color: white;
+    padding: 0 0.7em;
+    white-space: nowrap;
+    font-weight: 600;
+    
+
+
+    ul {
+        margin: 0;
+        padding: 0;
+
+        li {
+            list-style-type: none;
+            display: inline-block;
+            padding: 0.2em 0.2em;
+
+            a {
+                padding: 5px 5px;
+
+                &:visited {
+                    color: #09c;
+                }
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}
+div.nav.right {
+    @include round;
+    float: right;
+}
+div.nav.left {
+    @include round;
+    float: left;
+}
+#content {
+    @include linear-gradient(color-stops(#E5E3D2, white));
+    @include round;
+    background-color: #E5E3D2;
+    display: block;
+    font-size: 120%;
+    font-weight: 300;
+    margin-bottom: 1em;
+    margin-top: 2em;
+    padding-bottom: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 15px;
+    vertical-align: baseline;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@mixin base_button {
+    @include linear-gradient(color-stops(#eda61d, #df8608));
+    @include round(12px);
+    @include background-clip(padding-box);
+    @include box-shadow(rgba(0, 0, 0, 0.4), 0px, 1px, 3px);
+    background-color: #df8608 !important;
+    font-weight: 900;
+    color: #eeeeee;
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    margin: 0 auto;
+    padding: 9px 26px 9px;
+    cursor: pointer;
+    line-height: 1;
+    letter-spacing: 0.6px !important;
+    outline: none;
+    text-shadow: 1px 1px 0 #824b0a;
+    border: 1px solid #ba6e00;
+    width: 150px;
+    font-size: 2em;
+
+    &:hover {
+        @include linear-gradient(color-stops(#ba6d00, #874f00));
+        text-decoration: none;
+        background-color: #a05e00 !important;
+        color: white;
+        border: 1px solid #006300;
+        text-shadow: 1px 1px 0 black;
+    }
+}
+
+.signin_button {
+    @include base_button;
+}
+
+.submit_button {
+    @include base_button;
+    font-size: 1.2em;
+    width: 120px;
+}
+.download_button {
+    @include base_button;
+    font-size: 1.2em;
+    width: 150px;
+}
