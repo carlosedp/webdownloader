@@ -1,11 +1,12 @@
-h1 Sign in
+h2 Sign in
+br
 form(method="post", action="/signin")
-  fieldset.round
+  fieldset
     div.field 
       label(for="username") Username:
-      input(type="text", name='username', size=25)
+      input(type="text", name='username')
     div.field
       label(for="password") Password:
-      input(type="password", name='password', size=25)
+      input(type="password", name='password')
     div.actions
       input(type="submit", value="Sign in").submit_login

@@ -1,21 +1,20 @@
 div#logo
   a(href='/')
     img(src='/img/logo.png')
-nav.round
+div.nav.right.round
   ul
-    a(href='/') Home
-      - if (signedIn)
-        li 
-          a(href='/downloads') My Downloads
-        li 
-          a(href='/profile') My Profile
-        li 
-          a(href='/settings') Settings
+    li
+      a(href='/') Home
+    - if (signedIn)
       li 
-        a(href='/help' ) Help
-      - if (signedIn)
-        li 
-          a(href='/signout') Sign Out
-      - else
-        li 
-          a(href='/signin') Sign In
+        a(href='/downloads') My Downloads
+      li 
+        a(href='/settings') Settings
+    li 
+      a(href='/help' ) Help
+    - if (signedIn)
+      li 
+        a(href='/signout') Sign Out
+    - else
+      li 
+        a(href='/signin') Sign In
