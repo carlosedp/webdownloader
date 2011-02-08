@@ -120,49 +120,54 @@ div.nav.left {
     margin-right: auto;
 }
 
-@mixin base_button {
+@mixin button {
     @include linear-gradient(color-stops(#eda61d, #df8608));
     @include round(12px);
     @include background-clip(padding-box);
     @include box-shadow(rgba(0, 0, 0, 0.4), 0px, 1px, 3px);
-    background-color: #df8608 !important;
+    background-color: #df8608;
+	display: inline-block;
+	outline: none;
+	cursor: pointer;
     font-weight: 900;
-    color: #eeeeee;
-    display: block;
-    text-decoration: none;
-    text-align: center;
+    font-size: 2em;
     margin: 0 auto;
-    padding: 9px 26px 9px;
-    cursor: pointer;
+	text-align: center;
     line-height: 1;
     letter-spacing: 0.6px !important;
-    outline: none;
-    text-shadow: 1px 1px 0 #824b0a;
-    border: 1px solid #ba6e00;
-    width: 150px;
-    font-size: 2em;
+	text-decoration: none;
+    padding: 9px 26px 9px;
+	text-shadow: 0 1px 1px rgba(0,0,0,.3);
+	color: #eeeeee;
+	border: solid 1px #da7c0c;
+    
 
     &:hover {
         @include linear-gradient(color-stops(#ba6d00, #874f00));
+        background-color: #a05e00;
         text-decoration: none;
-        background-color: #a05e00 !important;
         color: white;
         border: 1px solid #006300;
         text-shadow: 1px 1px 0 black;
     }
+    &:active {
+        @include linear-gradient(color-stops(#f47a20, #faa51a));
+        position: relative;
+        top: 1px;
+        color: #fcd3a5;
+    }
 }
 
 .signin_button {
-    @include base_button;
+    @include button;
 }
 
 .submit_button {
-    @include base_button;
+    @include button;
     font-size: 1.2em;
-    width: 120px;
+
 }
 .download_button {
-    @include base_button;
+    @include button;
     font-size: 1.2em;
-    width: 150px;
 }
