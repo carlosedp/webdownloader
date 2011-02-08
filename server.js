@@ -96,7 +96,7 @@ function restrict(req, res, next) {
     next();
   } else {
     req.session.error = 'Access denied!';
-    res.redirect('/login');
+    res.redirect('/signin');
   }
 }
 
@@ -189,6 +189,7 @@ server.post('/submitDownload', restrict,
             } else {
                 req.flash('info', 'Download for the file ' + req.form.download + ' scheduled.');
                 console.log("Download file:", req.form.download);
+                downloader.downloadFile(req.form.download);
             }
         res.redirect('back');
 });
