@@ -1,34 +1,12 @@
-// This import applies a global reset to any page that imports this stylesheet.
-@import "blueprint/reset";
-
-// To configure blueprint, edit the partials/_base.sass file.
-@import "partials/base";
-
-// Import all the default blueprint modules so that we can access their mixins.
-@import "blueprint";
-
-// Import the non-default scaffolding module.
-@import "blueprint/scaffolding";
-
-// Generate the blueprint framework according to your configuration:
-@include blueprint;
-
-@include blueprint-scaffolding;
-
+@import "compass/reset"; 
 @import "compass";
-
-@mixin round($radius: 10px) {
-    -moz-border-radius: $radius;
-    -webkit-border-radius: $radius;
-    border-radius: $radius;
-}
 
 html body {
     background-color: #adf;
     -webkit-font-smoothing: antialiased;
     line-height: 1;
     font-weight: 300;
-    font-family: 'Cantarell', "Helvetica Nueue", "Lucida Grande", Arial, sans-serif;
+    font-family: 'Cantarell', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
     line-height: 1.5;
     font-size: 14px;
 }
@@ -37,21 +15,45 @@ html body {
     width: 820px;
     margin: 0 auto;
 }
+
+h1 {
+    font-size: 2.5em;
+    font-weight: 300;
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 0 white; 
+}
+
+h2 {
+    font-size: 2em;
+    font-weight: 300; 
+}
+
+h3 {
+    font-size: 1.8em;
+    font-weight: normal;
+
+    span {
+        font-size: 17px !important;
+        color: #888888 !important;
+    }
+}
+
+
 a {
     color: #09c;
     text-decoration: none;
     &:hover {
         color: #069;
         text-decoration: underline;
-    }
-    &:visited {
-        color: #069;
-    }
+}
+&:visited {
+    color: #069;
+}
 }
 
 #header {
     display: block;
-    padding-top: 10px;
+    padding-top: 20px;
 }
 
 #logo {
@@ -59,13 +61,12 @@ a {
 }
 
 div.nav {
+    @include border-radius(10px);
     display: inline-block;
     background-color: white;
     padding: 0 0.7em;
     white-space: nowrap;
     font-weight: 600;
-    
-
 
     ul {
         margin: 0;
@@ -81,29 +82,27 @@ div.nav {
 
                 &:visited {
                     color: #09c;
-                }
-                &:hover {
-                    text-decoration: underline;
-                }
+            }
+            &:hover {
+                text-decoration: underline;
             }
         }
     }
 }
+}
 div.nav.right {
-    @include round;
     float: right;
 }
 div.nav.left {
-    @include round;
     float: left;
 }
 #content {
     @include linear-gradient(color-stops(#E5E3D2, white));
-    @include round;
+    @include border-radius(10px);
     background-color: #E5E3D2;
     display: block;
-    font-size: 120%;
-    font-weight: 300;
+    //font-size: 120%;
+    //font-weight: 300;
     margin-bottom: 1em;
     margin-top: 2em;
     padding-bottom: 15px;
@@ -121,40 +120,35 @@ div.nav.left {
 }
 
 @mixin button {
-    @include linear-gradient(color-stops(#eda61d, #df8608));
-    @include round(12px);
-    @include background-clip(padding-box);
-    @include box-shadow(rgba(0, 0, 0, 0.4), 0px, 1px, 3px);
-    @include text-shadow(#824b0a, 1, 1, 1);
-    background-color: #df8608;
-	display: inline-block;
-	outline: none;
-	cursor: pointer;
+    color: #fef4e9;
+    display: inline-block;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
     font-weight: 900;
     font-size: 2em;
-    margin: 0 auto;
-	text-align: center;
     line-height: 1;
     letter-spacing: 0.6px !important;
-	text-decoration: none;
-    padding: 9px 26px 9px;
-	color: #eeeeee;
-	border: solid 1px #da7c0c;
-    
+    padding: 9px 26px 9.2px;
+    @include text-shadow(rgba(0,0,0,.3), 3, 3, 1);
+    @include border-radius(10px);
+    @include box-shadow(rgba(0, 0, 0, 0.4), 0px, 1px, 3px);
+    border: solid 1px #da7c0c;
+    background: #f78d1d;
+    @include linear-gradient(color-stops(#faa51a, #f47a20));
 
     &:hover {
-        @include linear-gradient(color-stops(#ba6d00, #874f00));
-        @include text-shadow(black, 1, 1, 1);
-        background-color: #a05e00;
         text-decoration: none;
-        color: white;
-        border: 1px solid #006300;
+        background: #f47c20;
+        color: #fef4e9;
+        @include linear-gradient(color-stops(#f88e11, #f06015));
     }
     &:active {
-        @include linear-gradient(color-stops(#f47a20, #faa51a));
         position: relative;
         top: 1px;
         color: #fcd3a5;
+        @include linear-gradient(color-stops(#f47a20, #faa51a)); 
     }
 }
 
