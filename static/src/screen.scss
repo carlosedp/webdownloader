@@ -125,6 +125,7 @@ div.nav.left {
     @include round(12px);
     @include background-clip(padding-box);
     @include box-shadow(rgba(0, 0, 0, 0.4), 0px, 1px, 3px);
+    @include text-shadow(#824b0a, 1, 1, 1);
     background-color: #df8608;
 	display: inline-block;
 	outline: none;
@@ -137,18 +138,17 @@ div.nav.left {
     letter-spacing: 0.6px !important;
 	text-decoration: none;
     padding: 9px 26px 9px;
-	text-shadow: 0 1px 1px rgba(0,0,0,.3);
 	color: #eeeeee;
 	border: solid 1px #da7c0c;
     
 
     &:hover {
         @include linear-gradient(color-stops(#ba6d00, #874f00));
+        @include text-shadow(black, 1, 1, 1);
         background-color: #a05e00;
         text-decoration: none;
         color: white;
         border: 1px solid #006300;
-        text-shadow: 1px 1px 0 black;
     }
     &:active {
         @include linear-gradient(color-stops(#f47a20, #faa51a));

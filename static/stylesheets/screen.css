@@ -1443,6 +1443,7 @@ div.nav.left {
   -webkit-box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0;
   -o-box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0;
+  text-shadow: #824b0a 1 1 1;
   background-color: #df8608;
   display: inline-block;
   outline: none;
@@ -1455,7 +1456,6 @@ div.nav.left {
   letter-spacing: 0.6px !important;
   text-decoration: none;
   padding: 9px 26px 9px;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
   color: #eeeeee;
   border: solid 1px #da7c0c;
 }
@@ -1464,11 +1464,11 @@ div.nav.left {
   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #ba6d00), color-stop(100%, #874f00));
   background-image: -moz-linear-gradient(top, #ba6d00 0%, #874f00 100%);
   background-image: linear-gradient(top, #ba6d00 0%, #874f00 100%);
+  text-shadow: black 1 1 1;
   background-color: #a05e00;
   text-decoration: none;
   color: white;
   border: 1px solid #006300;
-  text-shadow: 1px 1px 0 black;
 }
 /* line 153, ../src/screen.scss */
 .signin_button:active {
@@ -1498,6 +1498,7 @@ div.nav.left {
   -webkit-box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0;
   -o-box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0;
+  text-shadow: #824b0a 1 1 1;
   background-color: #df8608;
   display: inline-block;
   outline: none;
@@ -1510,7 +1511,6 @@ div.nav.left {
   letter-spacing: 0.6px !important;
   text-decoration: none;
   padding: 9px 26px 9px;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
   color: #eeeeee;
   border: solid 1px #da7c0c;
   font-size: 1.2em;
@@ -1520,11 +1520,11 @@ div.nav.left {
   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #ba6d00), color-stop(100%, #874f00));
   background-image: -moz-linear-gradient(top, #ba6d00 0%, #874f00 100%);
   background-image: linear-gradient(top, #ba6d00 0%, #874f00 100%);
+  text-shadow: black 1 1 1;
   background-color: #a05e00;
   text-decoration: none;
   color: white;
   border: 1px solid #006300;
-  text-shadow: 1px 1px 0 black;
 }
 /* line 153, ../src/screen.scss */
 .submit_button:active {
@@ -1554,6 +1554,7 @@ div.nav.left {
   -webkit-box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0;
   -o-box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0;
+  text-shadow: #824b0a 1 1 1;
   background-color: #df8608;
   display: inline-block;
   outline: none;
@@ -1566,7 +1567,6 @@ div.nav.left {
   letter-spacing: 0.6px !important;
   text-decoration: none;
   padding: 9px 26px 9px;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
   color: #eeeeee;
   border: solid 1px #da7c0c;
   font-size: 1.2em;
@@ -1576,11 +1576,11 @@ div.nav.left {
   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #ba6d00), color-stop(100%, #874f00));
   background-image: -moz-linear-gradient(top, #ba6d00 0%, #874f00 100%);
   background-image: linear-gradient(top, #ba6d00 0%, #874f00 100%);
+  text-shadow: black 1 1 1;
   background-color: #a05e00;
   text-decoration: none;
   color: white;
   border: 1px solid #006300;
-  text-shadow: 1px 1px 0 black;
 }
 /* line 153, ../src/screen.scss */
 .download_button:active {
