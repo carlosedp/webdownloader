@@ -35,24 +35,26 @@ server.configure(function(){
     });
 
 server.configure('development', function() {
-  //server.set('db-uri', 'mongodb://localhost/nodepad-development');
-  //server.use(express.errorHandler({ showStack: true, dumpExceptions: true }));  
+    //server.set('db-uri', 'mongodb://localhost/nodepad-development');
+      server.use(express.errorHandler({ showStack: true, dumpExceptions: true }));  
 });
 
 server.configure('test', function() {
-  //server.set('db-uri', 'mongodb://localhost/nodepad-test');
+    //server.set('db-uri', 'mongodb://localhost/nodepad-test');
+    server.use(express.errorHandler()); 
 });
 
 server.configure('production', function() {
-  //server.set('db-uri', 'mongodb://localhost/nodepad-production');
+    //server.set('db-uri', 'mongodb://localhost/nodepad-production');
+      server.use(express.errorHandler()); 
 });
 
 //setup the errors
 server.error(function(err, req, res, next){
     if (err instanceof NotFound) {
-        res.render('404', { status: 404, locals: { url: req.url } } );
+        res.render('errors/404', { status: 404, locals: { url: req.url } } );
     } else {
-        res.render('500', { locals: { error: err },status: 500 });
+        res.render('errors/500', { locals: { error: err },status: 500 });
     }
 });
 
@@ -63,8 +65,9 @@ function NotFound(msg){
 }
 
 // Generate a salt for the user to prevent rainbow table attacks
+// TODO -> Change to DB 
 var users = {
-  carlosedp: {
+  'carlosedp@gmail.com': {
     name: 'carlosedp'
     , salt: 'randomly-generated-salt'
     , pass: md5('qwe' + 'randomly-generated-salt')
@@ -78,7 +81,7 @@ function md5(str) {
 }
 
 // Authenticate using our plain-object database of doom!
-
+// TODO -> Change to DB 
 function authenticate(name, pass, fn) {
   var user = users[name];
   // query the db for the given username
@@ -96,7 +99,7 @@ function restrict(req, res, next) {
     next();
   } else {
     req.session.error = 'Access denied!';
-    res.redirect('/signin');
+    res.redirect('/session/new');
   }
 }
 
@@ -116,34 +119,68 @@ function isEmail(email) {
    return regexp.test(email);
 }
 
+/////////////////////////////////////////
+//              API                   //
+////////////////////////////////////////
+/*
+Downloads:
+---------------------------------------------------------------------------------------
+|GET     | /downloads      | Index method that returns the downloads list for the user
+|POST    | /downloads/     | Submits a new download
+|GET     | /downloads/:id  | Returns the download info page
+|DELETE  | /downloads/:id  | Delete the download
+---------------------------------------------------------------------------------------
+
+Users:
+---------------------------------------------------------------------------------------
+|GET     | /user/new       | Display new user sign-up page
+|POST    | /user           | Submits a new user
+|GET     | /user           | Shows user info page / settings
+|DELETE  | /user           | Delete the user
+---------------------------------------------------------------------------------------
+
+Sessions:
+---------------------------------------------------------------------------------------
+|GET     | /session/new    | Display user Sign-in page
+|POST    | /session        | Sign-in user
+|DELETE  | /session        | Sign-out user
+---------------------------------------------------------------------------------------
+*/
+
 ///////////////////////////////////////////
 //              Routes                   //
 ///////////////////////////////////////////
 
-
+// Home page
 server.get('/', function(req, res) {
-    res.render('home', {
-        locals: {
-            title: 'Web Downloader'
-        }
-    });
+    if (req.session.user) {
+        res.redirect('/downloads');
+    } else {
+        res.render('home', {
+            locals: {
+                title: 'Web Downloader'
+            }
+        });
+    }
 });
 
-server.get('/signin', function(req, res) {
-    //if (req.session.user) {
-        //req.flash('info', 'You are already logged-in as' + req.session.user);
-        //console.log("User already logged as " + req.session.user);
-        //res.redirect('/');
-    //}
-    res.render('signin', {
+// Sign-in user page
+server.get('/session/new', function(req, res) {
+    if (req.session.user) {
+        req.flash('info', 'You are already logged-in as' + req.session.user);
+        console.log("User already logged as " + req.session.user);
+        res.redirect('/downloads');
+    }
+    res.render('session/new', {
         locals: {
             title: 'Sign-in'
         }
     });
 });
 
-server.post('/signin', function(req, res) {
-  authenticate(req.body.username, req.body.password, function(err, user) {
+// Sign-in user submit
+server.post('/session', function(req, res) {
+  authenticate(req.body.email, req.body.password, function(err, user) {
     if (user) {
       // Regenerate session when signing in
       // to prevent fixation 
@@ -153,16 +190,18 @@ server.post('/signin', function(req, res) {
         // or in this case the entire user object
         req.session.user = user;
         req.flash('info', 'Signed in successfully');
-        res.redirect('/');
+        //TODO Redirect to user downloads
+        res.redirect('/downloads');
       });
     } else {
-      req.flash('error', 'Authentication failed. Check your user and password.');
-      res.redirect('/signin');
+      req.flash('error', 'Authentication failed. Check your email and password.');
+      res.redirect('/session/new');
     }
   });
 });
 
-server.get('/signout', function(req, res){
+// Sign-out user
+server.del('/session', function(req, res){
   // destroy the user's session to log them out
   // will be re-created next request
   req.session.destroy(function(){
@@ -170,13 +209,24 @@ server.get('/signout', function(req, res){
   });
 })
 
-server.get('/signup', function(req, res) {
-  res.render('users/new.jade', {
+// User sign-up page
+server.get('/user/new', function(req, res) {
+  res.render('user/new', {
     locals: { user: new User() }
   });
 })
 
-server.post('/submitDownload', restrict, 
+// User sign-up submission
+// TODO Create route
+
+
+// Downloads
+server.get('/downloads', function(req, res) {
+  res.render('downloads/index');
+})
+
+// Submit new download
+server.post('/downloads', restrict, 
         form(
             validate("download").required().isUrl("The download link is invalid.")
             ),
@@ -194,9 +244,8 @@ server.post('/submitDownload', restrict,
         res.redirect('back');
 });
 
-server.get('/restricted', restrict, accessLogger, function(req, res){
-  res.send('Wahoo! restricted area');
-})
+
+// Error routes
 
 //A Route for Creating a 500 Error (Useful to keep around)
 server.get('/500', function(req, res){
@@ -204,9 +253,9 @@ server.get('/500', function(req, res){
 });
 
 //The 404 Route (ALWAYS Keep this as the last route)
-server.get('/*', function(req, res){
-    throw new NotFound;
-});
+//server.get('/*', function(req, res){
+    //throw new NotFound;
+//});
 
 /////////// Run Server ///////////
 if (!module.parent) {

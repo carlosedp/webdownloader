@@ -9,12 +9,12 @@ div.nav.right
       li 
         a(href='/downloads') My Downloads
       li 
-        a(href='/settings') Settings
+        a(href='#') Settings
     li 
       a(href='/help' ) Help
     - if (signedIn)
       li 
-        a(href='/signout') Sign Out
+        a#logout(href='/session') Sign Out
     - else
       li 
-        a(href='/signin') Sign In
+        a(href='/session/new') Sign In
