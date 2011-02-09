@@ -1,0 +1,12 @@
+h2 Sign in
+br
+form(method="post", action="/session")
+  fieldset
+    div.field 
+      label(for="email") Email:
+      input(type="text", name='email')
+    div.field
+      label(for="password") Password:
+      input(type="password", name='password')
+    div.actions
+      input(type="submit", value="Sign in").submit_button
