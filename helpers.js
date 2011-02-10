@@ -32,7 +32,7 @@ FlashMessage.prototype = {
     },
 
     toHTML: function() {
-        return '<div class="flash round ' + this.type + '">' +
+        return '<div class="flash ' + this.type + '">' +
         this.messages.join(', ') +
         '</div>';
     }

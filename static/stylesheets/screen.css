@@ -205,7 +205,40 @@ div.nav.left {
   margin-right: auto;
 }
 
-/* line 155, ../src/screen.scss */
+/* line 122, ../src/screen.scss */
+span.code {
+  font-family: monospace;
+  background: #CCC;
+}
+
+/* line 127, ../src/screen.scss */
+.flash {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  clear: both;
+}
+
+/* line 134, ../src/screen.scss */
+.error {
+  background: #fbe3e4;
+  color: #8a1f11;
+  border: 1px solid #fbc2c4;
+}
+
+/* line 140, ../src/screen.scss */
+.info {
+  background: #d5edf8;
+  color: #205791;
+  border: 1px solid #92cae4;
+}
+
+/* line 179, ../src/screen.scss */
 .signin_button {
   color: #fef4e9;
   display: inline-block;
@@ -235,7 +268,7 @@ div.nav.left {
   background-image: -moz-linear-gradient(top, #faa51a 0%, #f47a20 100%);
   background-image: linear-gradient(top, #faa51a 0%, #f47a20 100%);
 }
-/* line 141, ../src/screen.scss */
+/* line 165, ../src/screen.scss */
 .signin_button:hover {
   text-decoration: none;
   background: #f47c20;
@@ -244,7 +277,7 @@ div.nav.left {
   background-image: -moz-linear-gradient(top, #f88e11 0%, #f06015 100%);
   background-image: linear-gradient(top, #f88e11 0%, #f06015 100%);
 }
-/* line 147, ../src/screen.scss */
+/* line 171, ../src/screen.scss */
 .signin_button:active {
   position: relative;
   top: 1px;
@@ -254,7 +287,7 @@ div.nav.left {
   background-image: linear-gradient(top, #f47a20 0%, #faa51a 100%);
 }
 
-/* line 159, ../src/screen.scss */
+/* line 183, ../src/screen.scss */
 .submit_button {
   color: #fef4e9;
   display: inline-block;
@@ -285,7 +318,7 @@ div.nav.left {
   background-image: linear-gradient(top, #faa51a 0%, #f47a20 100%);
   font-size: 1.2em;
 }
-/* line 141, ../src/screen.scss */
+/* line 165, ../src/screen.scss */
 .submit_button:hover {
   text-decoration: none;
   background: #f47c20;
@@ -294,7 +327,7 @@ div.nav.left {
   background-image: -moz-linear-gradient(top, #f88e11 0%, #f06015 100%);
   background-image: linear-gradient(top, #f88e11 0%, #f06015 100%);
 }
-/* line 147, ../src/screen.scss */
+/* line 171, ../src/screen.scss */
 .submit_button:active {
   position: relative;
   top: 1px;
@@ -304,7 +337,7 @@ div.nav.left {
   background-image: linear-gradient(top, #f47a20 0%, #faa51a 100%);
 }
 
-/* line 164, ../src/screen.scss */
+/* line 188, ../src/screen.scss */
 .download_button {
   color: #fef4e9;
   display: inline-block;
@@ -335,7 +368,7 @@ div.nav.left {
   background-image: linear-gradient(top, #faa51a 0%, #f47a20 100%);
   font-size: 1.2em;
 }
-/* line 141, ../src/screen.scss */
+/* line 165, ../src/screen.scss */
 .download_button:hover {
   text-decoration: none;
   background: #f47c20;
@@ -344,7 +377,7 @@ div.nav.left {
   background-image: -moz-linear-gradient(top, #f88e11 0%, #f06015 100%);
   background-image: linear-gradient(top, #f88e11 0%, #f06015 100%);
 }
-/* line 147, ../src/screen.scss */
+/* line 171, ../src/screen.scss */
 .download_button:active {
   position: relative;
   top: 1px;

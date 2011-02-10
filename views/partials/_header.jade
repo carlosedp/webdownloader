@@ -14,7 +14,8 @@ div.nav.right
       a(href='/help' ) Help
     - if (signedIn)
       li 
-        a#logout(href='/session') Sign Out
+        //a(href='/session/kill') Sign Out
+        a(href='#', onClick="if(confirm('Are you sure you want to sign out?')) {location='/session/kill'}; return false") Sign Out
     - else
       li 
         a(href='/session/new') Sign In

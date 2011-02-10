@@ -36,7 +36,7 @@ server.configure(function(){
 
 server.configure('development', function() {
     //server.set('db-uri', 'mongodb://localhost/nodepad-development');
-      server.use(express.errorHandler({ showStack: true, dumpExceptions: true }));  
+      //server.use(express.errorHandler({ showStack: true, dumpExceptions: true }));  
 });
 
 server.configure('test', function() {
@@ -63,6 +63,8 @@ function NotFound(msg){
     Error.call(this, msg);
     Error.captureStackTrace(this, arguments.callee);
 }
+sys.inherits(NotFound, Error)
+
 
 // Generate a salt for the user to prevent rainbow table attacks
 // TODO -> Change to DB 
@@ -123,12 +125,11 @@ function isEmail(email) {
 //              API                   //
 ////////////////////////////////////////
 /*
-Downloads:
+Sessions:
 ---------------------------------------------------------------------------------------
-|GET     | /downloads      | Index method that returns the downloads list for the user
-|POST    | /downloads/     | Submits a new download
-|GET     | /downloads/:id  | Returns the download info page
-|DELETE  | /downloads/:id  | Delete the download
+|GET     | /session/new    | Display user Sign-in page
+|POST    | /session        | Sign-in user
+|GET     | /session/kill   | Sign-out user
 ---------------------------------------------------------------------------------------
 
 Users:
@@ -139,12 +140,14 @@ Users:
 |DELETE  | /user           | Delete the user
 ---------------------------------------------------------------------------------------
 
-Sessions:
+Downloads:
 ---------------------------------------------------------------------------------------
-|GET     | /session/new    | Display user Sign-in page
-|POST    | /session        | Sign-in user
-|DELETE  | /session        | Sign-out user
+|GET     | /downloads      | Index method that returns the downloads list for the user
+|POST    | /downloads/     | Submits a new download
+|GET     | /downloads/:id  | Returns the download info page
+|DELETE  | /downloads/:id  | Delete the download
 ---------------------------------------------------------------------------------------
+
 */
 
 ///////////////////////////////////////////
@@ -163,6 +166,8 @@ server.get('/', function(req, res) {
         });
     }
 });
+
+////////////////////  Session routes ////////////////////
 
 // Sign-in user page
 server.get('/session/new', function(req, res) {
@@ -201,13 +206,15 @@ server.post('/session', function(req, res) {
 });
 
 // Sign-out user
-server.del('/session', function(req, res){
+server.get('/session/kill', function(req, res){
   // destroy the user's session to log them out
   // will be re-created next request
   req.session.destroy(function(){
     res.redirect('/');
   });
 })
+
+//////////////////// User routes ////////////////////
 
 // User sign-up page
 server.get('/user/new', function(req, res) {
@@ -216,11 +223,26 @@ server.get('/user/new', function(req, res) {
   });
 })
 
-// User sign-up submission
-// TODO Create route
+// Submits new user
+// TODO
+server.post('/user', function(req, res) {
+  res.render('user/????');
+})
+
+// User info/settings page
+server.get('/user', function(req, res) {
+  res.render('user/????');
+})
+
+// Remove user account
+server.del('/user', function(req, res) {
+  res.render('user/????');
+})
 
 
-// Downloads
+//////////////////// Download routes ////////////////////
+
+// Show user downloads
 server.get('/downloads', function(req, res) {
   res.render('downloads/index');
 })
@@ -244,8 +266,18 @@ server.post('/downloads', restrict,
         res.redirect('back');
 });
 
+// Returns the download info page
+server.get('/downloads/:id', function(req, res) {
+  res.render('downloads/???');
+})
 
-// Error routes
+// Delete the download
+server.del('/downloads/:id', function(req, res) {
+  res.render('downloads/???');
+})
+
+
+//////////////////// Error routes ////////////////////
 
 //A Route for Creating a 500 Error (Useful to keep around)
 server.get('/500', function(req, res){
@@ -253,9 +285,9 @@ server.get('/500', function(req, res){
 });
 
 //The 404 Route (ALWAYS Keep this as the last route)
-//server.get('/*', function(req, res){
-    //throw new NotFound;
-//});
+server.get('/*', function(req, res){
+    throw new NotFound;
+});
 
 /////////// Run Server ///////////
 if (!module.parent) {

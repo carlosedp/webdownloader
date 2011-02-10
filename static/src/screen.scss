@@ -119,6 +119,30 @@ div.nav.left {
     margin-right: auto;
 }
 
+span.code {
+    font-family: monospace;
+    background: #CCC;
+}
+
+.flash {
+    @include border-radius(5px);
+    padding: 10px;
+    margin: 10px 0;
+    clear: both;
+}
+
+.error {
+    background: #fbe3e4;
+    color: #8a1f11;
+    border: 1px solid #fbc2c4;
+}
+
+.info {
+    background: #d5edf8;
+    color: #205791;
+    border: 1px solid #92cae4;
+}
+
 @mixin button {
     color: #fef4e9;
     display: inline-block;
