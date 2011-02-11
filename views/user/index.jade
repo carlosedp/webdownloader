@@ -1,0 +1,29 @@
+h2 Your settings
+br
+div.gravatar
+  img(src=gravatar, alt=user.name || '')
+  p Change your avatar
+    br
+    | on 
+    a(href="http://gravatar.com", alt="Gravatar - Globally Recognized Avatar", target="_blank") gravatar.com
+    br
+    small (based on your email address)
+br
+form(method='post', action='/user')
+  input(type="hidden", name="_method", value="put")
+  div.field
+    label(for="user[name]") Name:
+    input(type="text", name="user[name]", value=user.name || '')
+  !=partial('user_fields', { locals: { user: user } })
+  br
+  p.small (type a new password below to change current)
+  div.field
+    label(for="new_password") New Password:
+    input(type="password", name='new_password')
+  div.field
+    label(for="new_password_confirm") Confirm Password:
+    input(type="password", name='new_password_confirm')
+  div.actions
+    input(type="submit", value="Update").signin_button    
+
+
