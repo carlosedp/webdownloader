@@ -10,9 +10,12 @@
     "node": ">= 0.2.6"
   },
   "dependencies": {
-    "express": "1.0.0",
-    "jade": "0.6.0",
-    "express-form": "0.4.0"
+    "express": ">= 1.0.0",
+    "jade": ">= 0.6.0",
+    "express-form": ">= 0.4.0",
+    "connect-mongodb": ">= 0.1.1",
+    "mongoose": ">= 1.0.7",
+    "node-gravatar": ">= 1.0.0"
   }
 }
 

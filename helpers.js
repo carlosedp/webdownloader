@@ -57,7 +57,7 @@ exports.dynamicHelpers = {
         return html;
     },
     signedIn: function(req, res) {
-        if (req.session.user) {
+        if (req.session.user_id) {
             return 1;
         } else {
             return 0;

@@ -1,15 +1,10 @@
 h2 Register
 
 form(method='post', action='/user')
-  div
-    label Email:
-    input(name='user[email]', value=user.email || '')
-  div
-    label Password:
-    input(name='user[password]', value=user.password || '', type='password')
-  div
-    input(type='submit', value='Register').submit_button
-    span \ or 
-      a(href='/session/new') Log In
+  !=partial('user_fields', { locals: { user: user } })
+    div.actions
+      input(type="submit", value="Sign up").signin_button
+      span \ or 
+        a(href='/session/new') Sign In
 
 
