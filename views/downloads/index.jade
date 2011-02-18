@@ -1,4 +1,6 @@
-h2 Submit your download
+h3 Submit your download
 br
 !=partial('downloads/new')
-
+hr
+h3 Your downloads
+!=partial('downloads/list', { locals: { downloads: downloads } })

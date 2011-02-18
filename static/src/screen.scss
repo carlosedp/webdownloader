@@ -37,7 +37,7 @@ h3 {
     span {
         font-size: 17px !important;
         color: #888888 !important;
-    }
+}
 }
 
 
@@ -84,12 +84,12 @@ div.nav {
 
                 &:visited {
                     color: #09c;
-            }
-            &:hover {
-                text-decoration: underline;
-            }
-        }
     }
+    &:hover {
+        text-decoration: underline;
+    }
+}
+}
 }
 }
 div.nav.right {
@@ -132,19 +132,19 @@ div.field {
         text-align: left;
         white-space: nowrap;
         min-width: 5em;
-    }
-    input {
-        font-family: $font-family; 
-        font-size: 1.1em;
-        font-weight: 500;
-        width: 250px;
-        padding: 3px 5px;
-        border: inset 1px #CCC;
-        @include border-radius(2px);
-        &:focus {
-            background: #feffb7;
-        }
-    }
+}
+input {
+    font-family: $font-family; 
+    font-size: 1.1em;
+    font-weight: 500;
+    width: 250px;
+    padding: 3px 5px;
+    border: inset 1px #CCC;
+    @include border-radius(2px);
+    &:focus {
+        background: #feffb7;
+}
+}
 }
 
 .flash {
@@ -191,13 +191,13 @@ div.field {
         background: #f47c20;
         color: #fef4e9;
         @include linear-gradient(color-stops(#f88e11, #f06015));
-    }
-    &:active {
-        position: relative;
-        top: 1px;
-        color: #fcd3a5;
-        @include linear-gradient(color-stops(#f47a20, #faa51a)); 
-    }
+}
+&:active {
+    position: relative;
+    top: 1px;
+    color: #fcd3a5;
+    @include linear-gradient(color-stops(#f47a20, #faa51a)); 
+}
 }
 
 .signup_button {
@@ -224,17 +224,59 @@ div.gravatar {
     width: 270px;
     margin-bottom: 10px;
     overflow: auto;
-    
+
     img {
         float: left;
         padding: 2px;
-    }
+}
 
-    p {
-        float: right;
-        width: 200px;
+p {
+    float: right;
+    width: 200px;
+}
+small {
+    font-size: 0.9em;
+}
+}
+
+div#downloads {
+    display: inline-block;
+    padding: 0 0.7em;
+    white-space: nowrap;
+
+    ul {
+        @include border-radius(10px);
+        background-color: #adf;
+        margin: 10px;
+        padding: 3px;
+        width: 100%;
+
+        li {
+            list-style-type: none;
+            display: inline-block;
+            padding: 0.2em 0.2em;
+
+            a {
+                //padding: 5px 5px;
+
+                &:visited {
+                    color: #09c;
+            }
+            &:hover {
+                text-decoration: underline;
+            }
+        }
     }
-    small {
-        font-size: 0.9em;
+    span {
+        margin-left: 15px;
+        font-weight: 600;
+    }
+    li.file {
+
+    }
+    li.url {
+        font-size: 0.7em;
     }
 }
+}
+

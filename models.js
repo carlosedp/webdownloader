@@ -1,4 +1,6 @@
 var crypto = require('crypto');
+var url = require('url');
+var config = require('./config');
 
 var Download;
 var User;
@@ -17,11 +19,15 @@ function defineModels(mongoose, fn) {
 		'date': {
 			type: Date,
 		default:
-			Date.now
+			Date.now,
 		},
 		'localpath': String,
 		'hash': String,
-		'refs': Number
+        'refs': Number,
+        'users': [String]
+	});
+	Download.virtual('localurl').get(function() {
+		return config.serverAddress + config.downloadDirSuffix + this.filename;
 	});
 
 	/**
@@ -53,7 +59,6 @@ function defineModels(mongoose, fn) {
 		default:
 			Date.now
 		},
-		'downloads': [Download]
 	});
 
 	User.virtual('id').get(function() {

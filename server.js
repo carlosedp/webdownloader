@@ -13,6 +13,7 @@ var filter = form.filter;
 var validate = form.validator;
 
 // Custom libraries
+var config = require('./config');
 var downloader = require('./downloader');
 var models = require('./models');
 
@@ -22,9 +23,9 @@ var Download;
 var User;
 
 // Server Configuration
-var serverPort = (process.env.PORT || 8000);
-var DBserverAddress = 'localhost';
-var pub = __dirname + '/static';
+var serverPort = config.serverPort;
+var DBserverAddress = config.DBserverAddress;
+var pub = config.pub;
 var Settings = {
 	development: {},
 	test: {},
@@ -80,7 +81,7 @@ models.defineModels(mongoose, function() {
 	Download = mongoose.model('Download');
 	User = mongoose.model('User');
 	db = mongoose.connect(server.set('db-uri'));
-})
+});
 
 // Setup the errors
 server.error(function(err, req, res, next) {
@@ -101,6 +102,9 @@ server.error(function(err, req, res, next) {
 	}
 });
 
+///////////////////////////////////////////
+//             Functions                 //
+///////////////////////////////////////////
 function NotFound(msg) {
 	this.name = 'NotFound';
 	Error.call(this, msg);
@@ -125,11 +129,6 @@ function loadUser(req, res, next) {
 	}
 }
 
-function accessLogger(req, res, next) {
-	console.log('/restricted accessed by %s', req.session.user.name);
-	next();
-}
-
 function isUrl(url) {
 	var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 	return regexp.test(url);
@@ -143,31 +142,32 @@ function isEmail(email) {
 /////////////////////////////////////////
 //              API                   //
 ////////////////////////////////////////
-//
-//Sessions:
-//---------------------------------------------------------------------------------------
-//|GET     | /session/new    | Display user Sign-in page
-//|POST    | /session        | Sign-in user
-//|DELETE  | /session        | Sign-out user
-//---------------------------------------------------------------------------------------
-//
-//Users:
-//---------------------------------------------------------------------------------------
-//|GET     | /user/new       | Display new user sign-up page
-//|POST    | /user           | Submits a new user
-//|GET     | /user           | Shows user info page / settings
-//|PUT     | /user           | Updates user info / settings
-//|DELETE  | /user           | Delete the user
-//---------------------------------------------------------------------------------------
-//
-//Downloads:
-//---------------------------------------------------------------------------------------
-//|GET     | /downloads      | Index method that returns the downloads list for the user
-//|POST    | /downloads/     | Submits a new download
-//|GET     | /downloads/:id  | Returns the download info page
-//|DELETE  | /downloads/:id  | Delete the download
-//---------------------------------------------------------------------------------------
-//
+/*
+Sessions:
+---------------------------------------------------------------------------------------
+|GET     | /session/new    | Display user Sign-in page
+|POST    | /session        | Sign-in user
+|DELETE  | /session        | Sign-out user
+---------------------------------------------------------------------------------------
+
+Users:
+---------------------------------------------------------------------------------------
+|GET     | /user/new       | Display new user sign-up page
+|POST    | /user           | Submits a new user
+|GET     | /user           | Shows user info page / settings
+|PUT     | /user           | Updates user info / settings
+|DELETE  | /user           | Delete the user
+---------------------------------------------------------------------------------------
+
+Downloads:
+---------------------------------------------------------------------------------------
+|GET     | /downloads      | Index method that returns the downloads list for the user
+|POST    | /downloads/     | Submits a new download
+|GET     | /downloads/:id  | Returns the download info page
+|DELETE  | /downloads/:id  | Delete the download
+---------------------------------------------------------------------------------------
+*/
+
 ///////////////////////////////////////////
 //              Routes                   //
 ///////////////////////////////////////////
@@ -314,23 +314,50 @@ server.del('/user', function(req, res) {
 //////////////////// Download routes ////////////////////
 // Show user downloads
 server.get('/downloads', loadUser, function(req, res) {
-	res.render('downloads/index');
+	Download.find({
+		users: req.currentUser.id
+	},
+	function(err, downloads) {
+		if (!downloads) downloads = [];
+
+		res.render('downloads/index', {
+			locals: {
+				downloads: downloads
+			}
+		});
+	});
 })
 
 // Submit new download
-server.post('/downloads', loadUser, form(
-validate("download").required().isUrl("The download link is invalid.")), function(req, res) {
-	console.log("Received request to download file: " + req.form.download);
-	if (!req.form.isValid) {
-		for (key in req.form.errors) {
-			req.flash('error', req.form.errors[key]);
+server.post('/downloads', loadUser, form(validate("url").required().isUrl("The download link is invalid.")), function(req, res) {
+
+	Download.find({
+		url: req.form.url
+	},
+	function(err, d) {
+		if (d.length >= 1) {
+			req.flash('error', 'Download already exists.');
+			res.redirect('back');
+		} else {
+			var d = new Download(req.body);
+			d.users.push(req.currentUser.id);
+			d.save(function(err) {
+				if (err) console.log("server.js - Error saving download: " + err);
+			});
+			if (!req.form.isValid) {
+				for (key in req.form.errors) {
+					console.log(req.form.errors);
+					req.flash('error', req.form.errors[key]);
+				}
+			} else {
+				req.flash('info', 'Download for the file ' + d.url + ' scheduled.');
+				console.log("Download file:", d.url);
+				downloader.downloadFile(d);
+			}
+			res.redirect('back');
 		}
-	} else {
-		req.flash('info', 'Download for the file ' + req.form.download + ' scheduled.');
-		console.log("Download file:", req.form.download);
-		downloader.downloadFile(req.form.download);
-	}
-	res.redirect('back');
+	});
+
 });
 
 // Returns the download info page
@@ -354,7 +381,11 @@ server.get('/*', function(req, res) {
 	throw new NotFound;
 });
 
-/////////// Run Server ///////////
+//////////////////// Run Server ////////////////////
+process.on('uncaughtException', function(err) {
+	console.log(err);
+});
+
 if (!module.parent) {
 	server.listen(serverPort);
 	console.log("Express server listening on port %d, environment: %s", server.address().port, server.settings.env);

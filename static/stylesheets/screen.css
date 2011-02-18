@@ -447,3 +447,46 @@ div.gravatar p {
 div.gravatar small {
   font-size: 0.9em;
 }
+
+/* line 242, ../src/screen.scss */
+div#downloads {
+  display: inline-block;
+  padding: 0 0.7em;
+  white-space: nowrap;
+}
+/* line 247, ../src/screen.scss */
+div#downloads ul {
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -o-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -khtml-border-radius: 10px;
+  border-radius: 10px;
+  background-color: #adf;
+  margin: 10px;
+  padding: 3px;
+  width: 100%;
+}
+/* line 254, ../src/screen.scss */
+div#downloads ul li {
+  list-style-type: none;
+  display: inline-block;
+  padding: 0.2em 0.2em;
+}
+/* line 262, ../src/screen.scss */
+div#downloads ul li a:visited {
+  color: #09c;
+}
+/* line 265, ../src/screen.scss */
+div#downloads ul li a:hover {
+  text-decoration: underline;
+}
+/* line 270, ../src/screen.scss */
+div#downloads ul span {
+  margin-left: 15px;
+  font-weight: 600;
+}
+/* line 277, ../src/screen.scss */
+div#downloads ul li.url {
+  font-size: 0.7em;
+}
