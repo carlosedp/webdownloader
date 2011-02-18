@@ -1,0 +1,14 @@
+div#downloads
+  - each dl in downloads
+    ul
+      li.file 
+        span Download: 
+        a(href=dl.localurl) #{dl.filename}
+      li.size 
+        span Size: 
+        #{dl.filesize}
+      li.date 
+        span Download Date: 
+        #{dl.date.getDate()}/#{dl.date.getMonth()}/#{dl.date.getFullYear()}
+      li.url 
+        a(href=dl.url) Source 
