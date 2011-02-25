@@ -1,5 +1,6 @@
 // Built-in libraries
 var express = require('express');
+var cluster = require('cluster');
 var connect = require('connect');
 var sys = require('sys');
 var crypto = require('crypto');
@@ -21,6 +22,7 @@ var models = require('./models');
 var db;
 var Download;
 var User;
+var LoginToken;
 
 // Server Configuration
 var serverPort = config.serverPort;
@@ -80,6 +82,7 @@ server.configure(function() {
 models.defineModels(mongoose, function() {
 	Download = mongoose.model('Download');
 	User = mongoose.model('User');
+	LoginToken = mongoose.model('LoginToken');
 	db = mongoose.connect(server.set('db-uri'));
 });
 
@@ -112,6 +115,43 @@ function NotFound(msg) {
 }
 sys.inherits(NotFound, Error)
 
+function authenticateFromLoginToken(req, res, next) {
+	var cookie = JSON.parse(req.cookies.logintoken);
+
+	LoginToken.findOne({
+		email: cookie.email,
+		series: cookie.series,
+		token: cookie.token
+	},
+	(function(err, token) {
+		if (!token) {
+			res.redirect('/sessions/new');
+			return;
+		}
+
+		User.findOne({
+			email: token.email
+		},
+		function(err, user) {
+			if (user) {
+				req.session.user_id = user.id;
+				req.currentUser = user;
+
+				token.token = token.randomToken();
+				token.save(function() {
+					res.cookie('logintoken', token.cookieValue, {
+						expires: new Date(Date.now() + 2 * 604800000),
+						path: '/'
+					});
+					next();
+				});
+			} else {
+				res.redirect('/sessions/new');
+			}
+		});
+	}));
+}
+
 function loadUser(req, res, next) {
 	if (req.session.user_id) {
 		User.findById(req.session.user_id, function(err, user) {
@@ -122,8 +162,8 @@ function loadUser(req, res, next) {
 				res.redirect('/session/new');
 			}
 		});
-		//} else if (req.cookies.logintoken) {
-		//  authenticateFromLoginToken(req, res, next);
+	} else if (req.cookies.logintoken) {
+		authenticateFromLoginToken(req, res, next);
 	} else {
 		res.redirect('/session/new');
 	}
@@ -199,6 +239,18 @@ server.post('/session', function(req, res) {
 		if (user && user.authenticate(req.body.user.password)) {
 			req.session.regenerate(function() {
 				req.session.user_id = user.id;
+				// Remember me
+				if (req.body.remember_me) {
+					var loginToken = new LoginToken({
+						email: user.email
+					});
+					loginToken.save(function() {
+						res.cookie('logintoken', loginToken.cookieValue, {
+							expires: new Date(Date.now() + 2 * 604800000),
+							path: '/'
+						});
+					});
+				}
 				res.redirect('/downloads');
 			});
 		} else {
@@ -215,13 +267,17 @@ server.post('/session', function(req, res) {
 });
 
 // Sign-out user
-server.del('/session', function(req, res) {
-	// destroy the user's session to log them out
-	// will be re-created next request
-	req.session.destroy(function() {
-		res.redirect('/');
-	});
-})
+server.del('/session', loadUser, function(req, res) {
+	if (req.session) {
+		LoginToken.remove({
+			email: req.currentUser.email
+		},
+		function() {});
+		res.clearCookie('logintoken');
+		req.session.destroy(function() {});
+	}
+	res.redirect('/');
+});
 
 //////////////////// User routes ////////////////////
 // User sign-up page
@@ -362,13 +418,22 @@ server.post('/downloads', loadUser, form(validate("url").required().isUrl("The d
 
 // Returns the download info page
 server.get('/downloads/:id', loadUser, function(req, res) {
-	res.render('downloads/???');
-})
+	res.redirect('/downloads/');
+});
 
 // Delete the download
 server.del('/downloads/:id', loadUser, function(req, res) {
-	res.render('downloads/???');
-})
+	Download.findOne({
+		_id: req.params.id,
+		users: req.currentUser.id
+	},
+	function(err, dl) {
+		if (!err) {
+			dl.remove();
+		}
+	});
+	res.redirect('/downloads/');
+});
 
 //////////////////// Error routes ////////////////////
 //A Route for Creating a 500 Error (Useful to keep around)
@@ -382,12 +447,13 @@ server.get('/*', function(req, res) {
 });
 
 //////////////////// Run Server ////////////////////
-process.on('uncaughtException', function(err) {
-	console.log(err);
-});
+//process.on('uncaughtException', function(err) {
+	//console.log(err);
+//});
+cluster(server)
+.set('workers', 1)
+.use(cluster.reload())
+.use(cluster.debug())
+.listen(8000);
 
-if (!module.parent) {
-	server.listen(serverPort);
-	console.log("Express server listening on port %d, environment: %s", server.address().port, server.settings.env);
-}
 

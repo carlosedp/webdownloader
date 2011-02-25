@@ -23,8 +23,8 @@ function defineModels(mongoose, fn) {
 		},
 		'localpath': String,
 		'hash': String,
-        'refs': Number,
-        'users': [String]
+		'refs': Number,
+		'users': [String]
 	});
 	Download.virtual('localurl').get(function() {
 		return config.serverAddress + config.downloadDirSuffix + this.filename;
@@ -93,8 +93,52 @@ function defineModels(mongoose, fn) {
 		}
 	});
 
+	/**
+* Model: LoginToken
+*
+* Used for session persistence.
+*/
+	LoginToken = new Schema({
+		email: {
+			type: String,
+			index: true
+		},
+		series: {
+			type: String,
+			index: true
+		},
+		token: {
+			type: String,
+			index: true
+		}
+	});
+
+	LoginToken.method('randomToken', function() {
+		return Math.round((new Date().valueOf() * Math.random())) + '';
+	});
+
+	LoginToken.pre('save', function(next) {
+		// Automatically create the tokens
+		this.token = this.randomToken();
+		this.series = this.randomToken();
+		next();
+	});
+
+	LoginToken.virtual('id').get(function() {
+		return this._id.toHexString();
+	});
+
+	LoginToken.virtual('cookieValue').get(function() {
+		return JSON.stringify({
+			email: this.email,
+			token: this.token,
+			series: this.series
+		});
+	});
+
 	mongoose.model('Download', Download);
 	mongoose.model('User', User);
+	mongoose.model('LoginToken', LoginToken);
 
 	fn();
 }

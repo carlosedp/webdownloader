@@ -465,7 +465,7 @@ div#downloads ul {
   background-color: #adf;
   margin: 10px;
   padding: 3px;
-  width: 100%;
+  width: 750px;
 }
 /* line 254, ../src/screen.scss */
 div#downloads ul li {
@@ -486,7 +486,26 @@ div#downloads ul span {
   margin-left: 15px;
   font-weight: 600;
 }
+/* line 274, ../src/screen.scss */
+div#downloads ul li.file {
+  width: 35%;
+}
 /* line 277, ../src/screen.scss */
-div#downloads ul li.url {
+div#downloads ul li.size {
+  width: 15%;
+}
+/* line 283, ../src/screen.scss */
+div#downloads ul li.source {
   font-size: 0.7em;
+}
+/* line 286, ../src/screen.scss */
+div#downloads ul li.remove {
+  float: right;
+  text-align: right;
+}
+/* line 289, ../src/screen.scss */
+div#downloads ul li.remove img {
+  cursor: pointer;
+  padding-right: 5px;
+  vertical-align: text-top;
 }

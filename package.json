@@ -15,7 +15,8 @@
     "express-form": ">= 0.4.0",
     "connect-mongodb": ">= 0.1.1",
     "mongoose": ">= 1.0.7",
-    "node-gravatar": ">= 1.0.0"
+    "node-gravatar": ">= 1.0.0",
+    "cluster": ">=0.2.4"
   }
 }
 

@@ -1,8 +1,9 @@
 div#downloads
   - each dl in downloads
+    input(type="hidden", value=dl._id, name="docid")
     ul
       li.file 
-        span Download: 
+        span File: 
         a(href=dl.localurl) #{dl.filename}
       li.size 
         span Size: 
@@ -10,5 +11,7 @@ div#downloads
       li.date 
         span Download Date: 
         #{dl.date.getDate()}/#{dl.date.getMonth()}/#{dl.date.getFullYear()}
-      li.url 
+      li.source 
         a(href=dl.url) Source 
+      li.remove
+        img(src='/images/delete.png', width='17', height='17', alt='Remove download', dl_id=dl._id).remove_download

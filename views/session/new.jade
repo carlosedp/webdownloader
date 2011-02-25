@@ -1,6 +1,8 @@
 h2 Sign in
-br
 form(method="post", action="/session")
   !=partial('user_fields', { locals: { user: user } })
-    div.actions
-      input(type="submit", value="Sign in").signin_button
+  div.actions
+    input(type="submit", value="Sign in").signin_button
+    label(for='remember_me') Remember me:
+    input#remember_me(type='checkbox', name='remember_me')
+

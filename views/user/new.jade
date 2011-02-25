@@ -1,10 +1,7 @@
 h2 Register
-
 form(method='post', action='/user')
   !=partial('user_fields', { locals: { user: user } })
-    div.actions
-      input(type="submit", value="Sign up").signin_button
-      span \ or 
-        a(href='/session/new') Sign In
-
-
+  div.actions
+    input(type="submit", value="Sign Up").signin_button
+    span \ or 
+    a(href='/session/new') Sign In
