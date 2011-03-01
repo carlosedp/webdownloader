@@ -11,7 +11,7 @@ var gravatar = require('node-gravatar');
 // Form validation lib
 var form = require("express-form");
 var filter = form.filter;
-var validate = form.validator;
+var validate = form.validate;
 
 // Custom libraries
 var config = require('./config');
