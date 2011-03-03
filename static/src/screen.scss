@@ -37,7 +37,7 @@ h3 {
     span {
         font-size: 17px !important;
         color: #888888 !important;
-}
+    }
 }
 
 
@@ -45,12 +45,8 @@ a {
     color: #09c;
     text-decoration: none;
     &:hover {
-        color: #069;
         text-decoration: underline;
-}
-&:visited {
-    color: #069;
-}
+    }
 }
 
 #header {
@@ -84,13 +80,13 @@ div.nav {
 
                 &:visited {
                     color: #09c;
+                }
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
     }
-    &:hover {
-        text-decoration: underline;
-    }
-}
-}
-}
 }
 div.nav.right {
     float: right;

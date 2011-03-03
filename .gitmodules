@@ -1,0 +1,3 @@
+[submodule "modules/express-csrf"]
+	path = modules/express-csrf
+	url = http://github.com/hanssonlarsson/express-csrf.git

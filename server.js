@@ -1,5 +1,6 @@
 // Built-in libraries
 var express = require('express');
+var csrf = require('express-csrf');
 var cluster = require('cluster');
 var connect = require('connect');
 var sys = require('sys');
@@ -63,6 +64,9 @@ server.configure(function() {
 	server.set('view engine', 'jade');
 	server.helpers(require('./helpers.js').helpers);
 	server.dynamicHelpers(require('./helpers.js').dynamicHelpers);
+	server.dynamicHelpers({
+		csrf: csrf.token
+	});
 	server.use(express.favicon());
 	server.use(express.bodyDecoder());
 	server.use(express.cookieDecoder());
@@ -73,6 +77,7 @@ server.configure(function() {
 	server.use(express.logger({
 		format: '[:date] \x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :response-time ms'
 	}));
+	server.use(csrf.check());
 	server.use(express.methodOverride());
 	server.use(express.staticProvider(pub));
 	server.use(server.router);
@@ -187,7 +192,7 @@ Sessions:
 ---------------------------------------------------------------------------------------
 |GET     | /session/new    | Display user Sign-in page
 |POST    | /session        | Sign-in user
-|DELETE  | /session        | Sign-out user
+|GET     | /session/end    | Sign-out user
 ---------------------------------------------------------------------------------------
 
 Users:
@@ -201,10 +206,10 @@ Users:
 
 Downloads:
 ---------------------------------------------------------------------------------------
-|GET     | /downloads      | Index method that returns the downloads list for the user
-|POST    | /downloads/     | Submits a new download
-|GET     | /downloads/:id  | Returns the download info page
-|DELETE  | /downloads/:id  | Delete the download
+|GET      | /downloads          | Index method that returns the downloads list for the user
+|POST     | /downloads/         | Submits a new download
+|GET      | /downloads/:id      | Returns the download info page
+|GET      | /downloads/del/:id  | Delete the download
 ---------------------------------------------------------------------------------------
 */
 
@@ -267,7 +272,7 @@ server.post('/session', function(req, res) {
 });
 
 // Sign-out user
-server.del('/session', loadUser, function(req, res) {
+server.get('/session/end', loadUser, function(req, res) {
 	if (req.session) {
 		LoginToken.remove({
 			email: req.currentUser.email
@@ -386,33 +391,39 @@ server.get('/downloads', loadUser, function(req, res) {
 
 // Submit new download
 server.post('/downloads', loadUser, form(validate("url").required().isUrl("The download link is invalid.")), function(req, res) {
-
-	Download.find({
-		url: req.form.url
-	},
-	function(err, d) {
-		if (d.length >= 1) {
-			req.flash('error', 'Download already exists.');
-			res.redirect('back');
-		} else {
-			var d = new Download(req.body);
-			d.users.push(req.currentUser.id);
-			d.save(function(err) {
-				if (err) console.log("server.js - Error saving download: " + err);
-			});
-			if (!req.form.isValid) {
-				for (key in req.form.errors) {
-					console.log(req.form.errors);
-					req.flash('error', req.form.errors[key]);
+	if (!req.form.isValid) {
+		for (key in req.form.errors) {
+			console.log(req.form.errors);
+			req.flash('error', req.form.errors[key]);
+		}
+		res.redirect('/downloads/');
+	} else {
+		Download.findOne({
+			url: req.form.url
+		},
+		function(err, dl) {
+			if (dl) {
+				if (dl.users.indexOf(req.currentUser.id) != - 1) {
+					req.flash('error', 'Download already exists.');
+				} else {
+					dl.users.push(req.currentUser.id);
+					dl.save(function(err) {
+						if (err) console.log("server.js Existing download - Error saving download: " + err);
+					});
 				}
-			} else {
+            } else {
+                var d = new Download({url: req.body.url});
+				d.users.push(req.currentUser.id);
+				d.save(function(err) {
+					if (err) console.log("server.js New Download - Error saving download: " + err);
+				});
 				req.flash('info', 'Download for the file ' + d.url + ' scheduled.');
 				console.log("Download file:", d.url);
 				downloader.downloadFile(d);
 			}
-			res.redirect('back');
-		}
-	});
+			res.redirect('/downloads/');
+		});
+	}
 
 });
 
@@ -422,15 +433,27 @@ server.get('/downloads/:id', loadUser, function(req, res) {
 });
 
 // Delete the download
-server.del('/downloads/:id', loadUser, function(req, res) {
+server.get('/downloads/del/:id', loadUser, function(req, res) {
 	Download.findOne({
 		_id: req.params.id,
 		users: req.currentUser.id
 	},
-	function(err, dl) {
-		if (!err) {
-			dl.remove();
-		}
+    function(err, dl) {
+        if (!err) {
+            if (dl.users.length > 1) {
+                console.log(dl);
+                console.log(dl.users.indexOf(req.currentUser.id));
+                dl.users.splice(dl.users.indexOf(req.currentUser.id),1);
+                console.log(dl);
+                dl.save();
+                console.log(dl);
+                //dl.users[dl.users.indexOf(req.currentUser.id)].remove();
+            } else {
+                dl.remove();
+            }
+        } else {
+            console.log("Download does not exist. "+err);
+        }
 	});
 	res.redirect('/downloads/');
 });
@@ -447,13 +470,14 @@ server.get('/*', function(req, res) {
 });
 
 //////////////////// Run Server ////////////////////
-//process.on('uncaughtException', function(err) {
-	//console.log(err);
-//});
-cluster(server)
-.set('workers', 1)
-.use(cluster.reload())
-.use(cluster.debug())
-.listen(8000);
+process.on('uncaughtException', function(err) {
+    console.log(err);
+});
 
+
+if (!module.parent) {
+	//cluster(server).set('workers', 1).use(cluster.reload()).use(cluster.debug()).listen(8000);
+	server.listen(serverPort);
+	console.log("Express server listening on port %d, environment: %s", server.address().port, server.settings.env);
+}
 

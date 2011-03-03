@@ -1,0 +1,12 @@
+[Fri, 25 Feb 2011 19:54:55 GMT] INFO master started
+[Fri, 25 Feb 2011 19:54:55 GMT] INFO spawned worker 0
+[Fri, 25 Feb 2011 19:54:55 GMT] INFO spawned worker 1
+[Fri, 25 Feb 2011 19:54:55 GMT] INFO spawned worker 2
+[Fri, 25 Feb 2011 19:54:55 GMT] INFO spawned worker 3
+[Fri, 25 Feb 2011 19:55:14 GMT] WARNING shutting down master
+[Fri, 25 Feb 2011 19:55:18 GMT] INFO master started
+[Fri, 25 Feb 2011 19:55:18 GMT] INFO spawned worker 0
+[Fri, 25 Feb 2011 19:55:18 GMT] INFO spawned worker 1
+[Fri, 25 Feb 2011 19:55:18 GMT] INFO spawned worker 2
+[Fri, 25 Feb 2011 19:55:18 GMT] INFO spawned worker 3
+[Fri, 25 Feb 2011 19:56:52 GMT] WARNING shutting down master

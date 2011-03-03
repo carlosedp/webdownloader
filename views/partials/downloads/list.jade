@@ -14,4 +14,5 @@ div#downloads
       li.source 
         a(href=dl.url) Source 
       li.remove
-        img(src='/images/delete.png', width='17', height='17', alt='Remove download', dl_id=dl._id).remove_download
+        a(href='/downloads/del/'+dl._id, onClick="return confirm('Are you sure you want to remove this download?')")
+          img(src='/images/delete.png', width='17', height='17', alt='Remove download')

@@ -23,7 +23,6 @@ function defineModels(mongoose, fn) {
 		},
 		'localpath': String,
 		'hash': String,
-		'refs': Number,
 		'users': [String]
 	});
 	Download.virtual('localurl').get(function() {
