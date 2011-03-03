@@ -67,6 +67,7 @@ server.configure(function() {
 	server.dynamicHelpers({
 		csrf: csrf.token
 	});
+    server.dynamicHelpers({ messages: require('express-messages') });
 	server.use(express.favicon());
 	server.use(express.bodyDecoder());
 	server.use(express.cookieDecoder());
@@ -392,10 +393,6 @@ server.get('/downloads', loadUser, function(req, res) {
 // Submit new download
 server.post('/downloads', loadUser, form(validate("url").required().isUrl("The download link is invalid.")), function(req, res) {
 	if (!req.form.isValid) {
-		for (key in req.form.errors) {
-			console.log(req.form.errors);
-			req.flash('error', req.form.errors[key]);
-		}
 		res.redirect('/downloads/');
 	} else {
 		Download.findOne({
@@ -417,7 +414,7 @@ server.post('/downloads', loadUser, form(validate("url").required().isUrl("The d
 				d.save(function(err) {
 					if (err) console.log("server.js New Download - Error saving download: " + err);
 				});
-				req.flash('info', 'Download for the file ' + d.url + ' scheduled.');
+				req.flash('success', 'Download for the file ' + d.url + ' scheduled.');
 				console.log("Download file:", d.url);
 				downloader.downloadFile(d);
 			}
@@ -480,4 +477,3 @@ if (!module.parent) {
 	server.listen(serverPort);
 	console.log("Express server listening on port %d, environment: %s", server.address().port, server.settings.env);
 }
-

@@ -232,34 +232,59 @@ div.field input:focus {
   background: #feffb7;
 }
 
-/* line 146, ../src/screen.scss */
-.flash {
+/* line 147, ../src/screen.scss */
+.info, .success, .warning, .error, .validation {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   -o-border-radius: 5px;
   -ms-border-radius: 5px;
   -khtml-border-radius: 5px;
   border-radius: 5px;
-  padding: 10px;
-  margin: 10px 0;
-  clear: both;
+  border: 1px solid;
+  margin: 10px 0px;
+  padding: 15px 10px 15px 50px;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  padding-left: 70px;
+  list-style: circle;
 }
 
-/* line 153, ../src/screen.scss */
-.error {
-  background: #fbe3e4;
-  color: #8a1f11;
-  border: 1px solid #fbc2c4;
-}
-
-/* line 159, ../src/screen.scss */
+/* line 157, ../src/screen.scss */
 .info {
-  background: #d5edf8;
-  color: #205791;
-  border: 1px solid #92cae4;
+  color: #00529B;
+  background-color: #BDE5F8;
+  background-image: url("/images/info.png");
 }
 
-/* line 199, ../src/screen.scss */
+/* line 162, ../src/screen.scss */
+.success {
+  color: #4F8A10;
+  background-color: #DFF2BF;
+  background-image: url("/images/success.png");
+}
+
+/* line 167, ../src/screen.scss */
+.warning {
+  color: #9F6000;
+  background-color: #FEEFB3;
+  background-image: url("/images/warning.png");
+}
+
+/* line 172, ../src/screen.scss */
+.error {
+  color: #D8000C;
+  background-color: #FFBABA;
+  background-image: url("/images/error.png");
+}
+
+/* line 177, ../src/screen.scss */
+.validation {
+  color: #D63301;
+  background-color: #FFCCBA;
+  background-image: url("/images/validation.png");
+}
+
+/* line 218, ../src/screen.scss */
 .signup_button {
   color: #fef4e9;
   display: inline-block;
@@ -290,7 +315,7 @@ div.field input:focus {
   background-image: -moz-linear-gradient(top, #faa51a 0%, #f47a20 100%);
   background-image: linear-gradient(top, #faa51a 0%, #f47a20 100%);
 }
-/* line 185, ../src/screen.scss */
+/* line 204, ../src/screen.scss */
 .signup_button:hover {
   text-decoration: none;
   background: #f47c20;
@@ -299,7 +324,7 @@ div.field input:focus {
   background-image: -moz-linear-gradient(top, #f88e11 0%, #f06015 100%);
   background-image: linear-gradient(top, #f88e11 0%, #f06015 100%);
 }
-/* line 191, ../src/screen.scss */
+/* line 210, ../src/screen.scss */
 .signup_button:active {
   position: relative;
   top: 1px;
@@ -309,7 +334,7 @@ div.field input:focus {
   background-image: linear-gradient(top, #f47a20 0%, #faa51a 100%);
 }
 
-/* line 203, ../src/screen.scss */
+/* line 222, ../src/screen.scss */
 .signin_button {
   color: #fef4e9;
   display: inline-block;
@@ -342,7 +367,7 @@ div.field input:focus {
   font-size: 1.2em;
   margin-left: 150px;
 }
-/* line 185, ../src/screen.scss */
+/* line 204, ../src/screen.scss */
 .signin_button:hover {
   text-decoration: none;
   background: #f47c20;
@@ -351,7 +376,7 @@ div.field input:focus {
   background-image: -moz-linear-gradient(top, #f88e11 0%, #f06015 100%);
   background-image: linear-gradient(top, #f88e11 0%, #f06015 100%);
 }
-/* line 191, ../src/screen.scss */
+/* line 210, ../src/screen.scss */
 .signin_button:active {
   position: relative;
   top: 1px;
@@ -361,7 +386,7 @@ div.field input:focus {
   background-image: linear-gradient(top, #f47a20 0%, #faa51a 100%);
 }
 
-/* line 209, ../src/screen.scss */
+/* line 228, ../src/screen.scss */
 .download_button {
   color: #fef4e9;
   display: inline-block;
@@ -393,7 +418,7 @@ div.field input:focus {
   background-image: linear-gradient(top, #faa51a 0%, #f47a20 100%);
   font-size: 1.2em;
 }
-/* line 185, ../src/screen.scss */
+/* line 204, ../src/screen.scss */
 .download_button:hover {
   text-decoration: none;
   background: #f47c20;
@@ -402,7 +427,7 @@ div.field input:focus {
   background-image: -moz-linear-gradient(top, #f88e11 0%, #f06015 100%);
   background-image: linear-gradient(top, #f88e11 0%, #f06015 100%);
 }
-/* line 191, ../src/screen.scss */
+/* line 210, ../src/screen.scss */
 .download_button:active {
   position: relative;
   top: 1px;
@@ -412,7 +437,7 @@ div.field input:focus {
   background-image: linear-gradient(top, #f47a20 0%, #faa51a 100%);
 }
 
-/* line 214, ../src/screen.scss */
+/* line 233, ../src/screen.scss */
 div.gravatar {
   border: 1px solid #E5DECC;
   -moz-border-radius: 4px;
@@ -428,28 +453,28 @@ div.gravatar {
   margin-bottom: 10px;
   overflow: auto;
 }
-/* line 224, ../src/screen.scss */
+/* line 243, ../src/screen.scss */
 div.gravatar img {
   float: left;
   padding: 2px;
 }
-/* line 229, ../src/screen.scss */
+/* line 248, ../src/screen.scss */
 div.gravatar p {
   float: right;
   width: 200px;
 }
-/* line 233, ../src/screen.scss */
+/* line 252, ../src/screen.scss */
 div.gravatar small {
   font-size: 0.9em;
 }
 
-/* line 238, ../src/screen.scss */
+/* line 257, ../src/screen.scss */
 div#downloads {
   display: inline-block;
   padding: 0 0.7em;
   white-space: nowrap;
 }
-/* line 243, ../src/screen.scss */
+/* line 262, ../src/screen.scss */
 div#downloads ul {
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
@@ -462,43 +487,43 @@ div#downloads ul {
   padding: 3px;
   width: 750px;
 }
-/* line 250, ../src/screen.scss */
+/* line 269, ../src/screen.scss */
 div#downloads ul li {
   list-style-type: none;
   display: inline-block;
   padding: 0.2em 0.2em;
 }
-/* line 258, ../src/screen.scss */
+/* line 277, ../src/screen.scss */
 div#downloads ul li a:visited {
   color: #09c;
 }
-/* line 261, ../src/screen.scss */
+/* line 280, ../src/screen.scss */
 div#downloads ul li a:hover {
   text-decoration: underline;
 }
-/* line 266, ../src/screen.scss */
+/* line 285, ../src/screen.scss */
 div#downloads ul span {
   margin-left: 15px;
   font-weight: 600;
 }
-/* line 270, ../src/screen.scss */
+/* line 289, ../src/screen.scss */
 div#downloads ul li.file {
   width: 35%;
 }
-/* line 273, ../src/screen.scss */
+/* line 292, ../src/screen.scss */
 div#downloads ul li.size {
   width: 15%;
 }
-/* line 279, ../src/screen.scss */
+/* line 298, ../src/screen.scss */
 div#downloads ul li.source {
   font-size: 0.7em;
 }
-/* line 282, ../src/screen.scss */
+/* line 301, ../src/screen.scss */
 div#downloads ul li.remove {
   float: right;
   text-align: right;
 }
-/* line 285, ../src/screen.scss */
+/* line 304, ../src/screen.scss */
 div#downloads ul li.remove img {
   cursor: pointer;
   padding-right: 5px;

@@ -37,7 +37,7 @@ h3 {
     span {
         font-size: 17px !important;
         color: #888888 !important;
-    }
+}
 }
 
 
@@ -46,7 +46,7 @@ a {
     text-decoration: none;
     &:hover {
         text-decoration: underline;
-    }
+}
 }
 
 #header {
@@ -80,13 +80,13 @@ div.nav {
 
                 &:visited {
                     color: #09c;
-                }
-                &:hover {
-                    text-decoration: underline;
-                }
-            }
+        }
+        &:hover {
+            text-decoration: underline;
         }
     }
+}
+}
 }
 div.nav.right {
     float: right;
@@ -143,24 +143,43 @@ input {
 }
 }
 
-.flash {
+
+.info, .success, .warning, .error, .validation {
     @include border-radius(5px);
-    padding: 10px;
-    margin: 10px 0;
-    clear: both;
+    border: 1px solid;
+    margin: 10px 0px;
+    padding:15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    padding-left: 70px;
+    list-style: circle;
 }
-
-.error {
-    background: #fbe3e4;
-    color: #8a1f11;
-    border: 1px solid #fbc2c4;
-}
-
 .info {
-    background: #d5edf8;
-    color: #205791;
-    border: 1px solid #92cae4;
+    color: #00529B;
+    background-color: #BDE5F8;
+    background-image: url('/images/info.png');
 }
+.success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+    background-image:url('/images/success.png');
+}
+.warning {
+    color: #9F6000;
+    background-color: #FEEFB3;
+    background-image: url('/images/warning.png');
+}
+.error {
+    color: #D8000C;
+    background-color: #FFBABA;
+    background-image: url('/images/error.png');
+}
+.validation {
+    color: #D63301;
+    background-color: #FFCCBA;
+    background-image: url('/images/validation.png');
+}
+
 
 @mixin button {
     color: #fef4e9;
@@ -257,37 +276,37 @@ div#downloads {
 
                 &:visited {
                     color: #09c;
-                }
-            &:hover {
-                text-decoration: underline;
-                }
-            }
         }
-        span {
-            margin-left: 15px;
-            font-weight: 600;
-        }
-        li.file {
-            width: 35%;
-        }
-        li.size {
-            width: 15%;
-        }
-        li.date {
-
-        }
-        li.source {
-            font-size: 0.7em;
-        }
-        li.remove {
-            float: right;
-            text-align: right;
-            img {
-                cursor: pointer;
-                padding-right: 5px;
-                vertical-align: text-top;
-            }
+        &:hover {
+            text-decoration: underline;
         }
     }
+}
+span {
+    margin-left: 15px;
+    font-weight: 600;
+}
+li.file {
+    width: 35%;
+}
+li.size {
+    width: 15%;
+}
+li.date {
+
+}
+li.source {
+    font-size: 0.7em;
+}
+li.remove {
+    float: right;
+    text-align: right;
+    img {
+        cursor: pointer;
+        padding-right: 5px;
+        vertical-align: text-top;
+    }
+}
+}
 }
 
