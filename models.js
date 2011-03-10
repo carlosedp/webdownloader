@@ -23,7 +23,7 @@ function defineModels(mongoose, fn) {
 		},
 		'localpath': String,
 		'hash': String,
-		'users': [ObjectId]
+		'users': [String]
 	});
 	Download.virtual('localurl').get(function() {
 		return config.serverAddress + config.downloadDirSuffix + this.filename;

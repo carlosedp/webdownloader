@@ -1,6 +1,6 @@
 // Built-in libraries
 var express = require('express');
-var csrf = require('./modules/express-csrf');
+var csrf = require('express-csrf');
 var cluster = require('cluster');
 var connect = require('connect');
 var sys = require('sys');
@@ -62,6 +62,12 @@ server.configure('production', function() {
 server.configure(function() {
 	server.set('views', __dirname + '/views');
 	server.set('view engine', 'jade');
+	server.use(express.cookieParser());
+	server.use(express.bodyParser());
+	server.use(express.session({
+		//store: mongoStore(server.set('db-uri')),
+		secret: 'verysecret'
+	}));
 	server.helpers(require('./helpers.js').helpers);
 	server.dynamicHelpers(require('./helpers.js').dynamicHelpers);
 	server.dynamicHelpers({
@@ -71,18 +77,12 @@ server.configure(function() {
 		messages: require('express-messages')
 	});
 	server.use(express.favicon());
-	server.use(express.bodyDecoder());
-	server.use(express.cookieDecoder());
-	server.use(express.session({
-		store: mongoStore(server.set('db-uri')),
-		secret: 'verysecret'
-	}));
 	server.use(express.logger({
 		format: '[:date] \x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :response-time ms'
 	}));
 	server.use(csrf.check());
 	server.use(express.methodOverride());
-	server.use(express.staticProvider(pub));
+	server.use(express.static(pub));
 	server.use(server.router);
 });
 
@@ -99,15 +99,11 @@ server.error(function(err, req, res, next) {
 	if (err instanceof NotFound) {
 		res.render('errors/404', {
 			status: 404,
-			locals: {
-				url: req.url
-			}
+			url: req.url
 		});
 	} else {
 		res.render('errors/500', {
-			locals: {
-				error: err
-			},
+			error: err,
 			status: 500
 		});
 	}
@@ -232,9 +228,7 @@ server.get('/', function(req, res) {
 // Sign-in user page
 server.get('/session/new', function(req, res) {
 	res.render('session/new', {
-		locals: {
-			user: new User()
-		}
+		user: new User()
 	});
 });
 
@@ -264,11 +258,9 @@ server.post('/session', function(req, res) {
 		} else {
 			req.flash('error', 'Authentication failed. Check your email and password.');
 			res.render('session/new', {
-				locals: {
-					user: new User({
-						'email': req.body.user.email
-					})
-				}
+				user: new User({
+					'email': req.body.user.email
+				})
 			});
 		}
 	});
@@ -291,9 +283,7 @@ server.get('/session/end', loadUser, function(req, res) {
 // User sign-up page
 server.get('/user/new', function(req, res) {
 	res.render('user/new', {
-		locals: {
-			user: new User()
-		}
+		user: new User()
 	});
 })
 
@@ -306,9 +296,7 @@ server.post('/user', function(req, res) {
 		// TODO indicate failed fields
 		console.log("Errors: " + err);
 		res.render('user/new', {
-			locals: {
-				user: user
-			}
+			user: user
 		});
 	}
 
@@ -324,10 +312,8 @@ server.post('/user', function(req, res) {
 // User info/settings page
 server.get('/user', loadUser, function(req, res) {
 	res.render('user/index', {
-		locals: {
-			user: req.currentUser,
-			gravatar: gravatar.get(req.currentUser.email, 'R', 60, 'identicon')
-		}
+		user: req.currentUser,
+		gravatar: gravatar.get(req.currentUser.email, 'R', 60, 'identicon')
 	});
 });
 
@@ -385,9 +371,7 @@ server.get('/downloads', loadUser, function(req, res) {
 		if (!downloads) downloads = [];
 
 		res.render('downloads/index', {
-			locals: {
-				downloads: downloads
-			}
+			downloads: downloads
 		});
 	});
 })
@@ -401,7 +385,7 @@ server.post('/downloads', loadUser, form(validate("url").required().isUrl("The d
 			url: req.form.url
 		},
 		function(err, dl) {
-            if (dl) {
+			if (dl) {
 				if (dl.users.indexOf(req.currentUser.id) != - 1) {
 					req.flash('error', 'Download already exists.');
 				} else {
@@ -413,8 +397,8 @@ server.post('/downloads', loadUser, form(validate("url").required().isUrl("The d
 			} else {
 				var d = new Download({
 					url: req.body.url
-                });
-                d.users.push(req.currentUser.id);
+				});
+				d.users.push(req.currentUser.id);
 				d.save(function(err) {
 					if (err) console.log("server.js New Download - Error saving download: " + err);
 				});
@@ -435,20 +419,15 @@ server.get('/downloads/:id', loadUser, function(req, res) {
 
 // Delete the download
 server.get('/downloads/del/:id', loadUser, function(req, res) {
-	Download.findById(req.params.id,
-	function(err, dl) {
+	Download.findById(req.params.id, function(err, dl) {
 		if (dl) {
 			if (dl.users.length > 1) {
-				console.log("1->"+sys.inspect(dl));
-                console.log("2->"+dl.users.indexOf(req.currentUser.id));
-                console.log("Curr User:"+req.currentUser.id);
-                console.log(dl.users[0]);
-                dl.users.pop();
-				console.log("3->"+dl.users);
+                var oldusers = dl.users;
+                oldusers.splice(dl.users.indexOf(req.currentUser.id),1);
+                dl.users = oldusers;
 				dl.save(function(err) {
 					if (err) console.log("server.js New Download - Error saving download: " + err);
 				});
-				console.log("4->"+dl.users);
 			} else {
 				dl.remove();
 			}
@@ -472,7 +451,7 @@ server.get('/*', function(req, res) {
 
 //////////////////// Run Server ////////////////////
 process.on('uncaughtException', function(err) {
-    console.log(err);
+	console.log(err);
 });
 
 if (!module.parent) {

@@ -15,7 +15,7 @@ form(method='post', action='/user')
   div.field
     label(for="user[name]") Name:
     input(type="text", name="user[name]", value=user.name || '')
-  !=partial('user_fields', { locals: { user: user } })
+  !=partial('../partials/user_fields', { locals: { user: user } })
   br
   p.small (type a new password below to change current)
   div.field

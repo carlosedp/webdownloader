@@ -1,7 +1,7 @@
 h3 Submit a new download
 br
-!=partial('downloads/new')
+!=partial('new')
 - if (downloads.length)
   hr
   h3 Your downloads
-  !=partial('downloads/list', { locals: { downloads: downloads } })
+  !=partial('list', { locals: { downloads: downloads } })
