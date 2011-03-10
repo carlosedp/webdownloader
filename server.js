@@ -1,6 +1,6 @@
 // Built-in libraries
 var express = require('express');
-var csrf = require('express-csrf');
+var csrf = require('./modules/express-csrf');
 var cluster = require('cluster');
 var connect = require('connect');
 var sys = require('sys');
@@ -67,7 +67,9 @@ server.configure(function() {
 	server.dynamicHelpers({
 		csrf: csrf.token
 	});
-    server.dynamicHelpers({ messages: require('express-messages') });
+	server.dynamicHelpers({
+		messages: require('express-messages')
+	});
 	server.use(express.favicon());
 	server.use(express.bodyDecoder());
 	server.use(express.cookieDecoder());
@@ -399,7 +401,7 @@ server.post('/downloads', loadUser, form(validate("url").required().isUrl("The d
 			url: req.form.url
 		},
 		function(err, dl) {
-			if (dl) {
+            if (dl) {
 				if (dl.users.indexOf(req.currentUser.id) != - 1) {
 					req.flash('error', 'Download already exists.');
 				} else {
@@ -408,9 +410,11 @@ server.post('/downloads', loadUser, form(validate("url").required().isUrl("The d
 						if (err) console.log("server.js Existing download - Error saving download: " + err);
 					});
 				}
-            } else {
-                var d = new Download({url: req.body.url});
-				d.users.push(req.currentUser.id);
+			} else {
+				var d = new Download({
+					url: req.body.url
+                });
+                d.users.push(req.currentUser.id);
 				d.save(function(err) {
 					if (err) console.log("server.js New Download - Error saving download: " + err);
 				});
@@ -431,26 +435,26 @@ server.get('/downloads/:id', loadUser, function(req, res) {
 
 // Delete the download
 server.get('/downloads/del/:id', loadUser, function(req, res) {
-	Download.findOne({
-		_id: req.params.id,
-		users: req.currentUser.id
-	},
-    function(err, dl) {
-        if (!err) {
-            if (dl.users.length > 1) {
-                console.log(dl);
-                console.log(dl.users.indexOf(req.currentUser.id));
-                dl.users.splice(dl.users.indexOf(req.currentUser.id),1);
-                console.log(dl);
-                dl.save();
-                console.log(dl);
-                //dl.users[dl.users.indexOf(req.currentUser.id)].remove();
-            } else {
-                dl.remove();
-            }
-        } else {
-            console.log("Download does not exist. "+err);
-        }
+	Download.findById(req.params.id,
+	function(err, dl) {
+		if (dl) {
+			if (dl.users.length > 1) {
+				console.log("1->"+sys.inspect(dl));
+                console.log("2->"+dl.users.indexOf(req.currentUser.id));
+                console.log("Curr User:"+req.currentUser.id);
+                console.log(dl.users[0]);
+                dl.users.pop();
+				console.log("3->"+dl.users);
+				dl.save(function(err) {
+					if (err) console.log("server.js New Download - Error saving download: " + err);
+				});
+				console.log("4->"+dl.users);
+			} else {
+				dl.remove();
+			}
+		} else {
+			console.log("Download does not exist. " + err);
+		}
 	});
 	res.redirect('/downloads/');
 });
@@ -471,9 +475,9 @@ process.on('uncaughtException', function(err) {
     console.log(err);
 });
 
-
 if (!module.parent) {
 	//cluster(server).set('workers', 1).use(cluster.reload()).use(cluster.debug()).listen(8000);
 	server.listen(serverPort);
 	console.log("Express server listening on port %d, environment: %s", server.address().port, server.settings.env);
 }
+
