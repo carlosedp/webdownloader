@@ -6,7 +6,7 @@ var connect = require('connect');
 var sys = require('sys');
 var crypto = require('crypto');
 var mongoose = require('mongoose');
-var mongoStore = require('connect-mongodb');
+var mongoStore = require('connect-mongo');
 var gravatar = require('node-gravatar');
 
 // Form validation lib
@@ -33,22 +33,18 @@ var server = express.createServer();
 
 // Dev environment
 server.configure('development', function() {
-	server.set('db-uri', 'mongodb://' + DBserverAddress + '/webdownloader-dev');
+    server.set('db-name', 'webdownloader-dev');
+	server.set('db-uri', 'mongodb://' + DBserverAddress + '/' +server.set('db-name'));
 	server.use(express.errorHandler({
 		showStack: true,
 		dumpExceptions: true
 	}));
 });
 
-// Test environment
-server.configure('test', function() {
-	server.set('db-uri', 'mongodb://' + DBserverAddress + '/webdownloader-test');
-	server.use(express.errorHandler());
-});
-
 // Configure production environment
 server.configure('production', function() {
-	server.set('db-uri', 'mongodb://' + DBserverAddress + '/webdownloader-prod');
+    server.set('db-name', 'webdownloader-prod');
+	server.set('db-uri', 'mongodb://' + DBserverAddress + '/' +server.set('db-name'));
 	server.use(express.errorHandler());
 });
 
@@ -56,11 +52,17 @@ server.configure('production', function() {
 server.configure(function() {
 	server.set('views', __dirname + '/views');
 	server.set('view engine', 'jade');
-	server.use(express.cookieParser());
 	server.use(express.bodyParser());
+	server.use(express.methodOverride());
+	server.use(express.cookieParser());
 	server.use(express.session({
-		//store: mongoStore(server.set('db-uri')),
-		secret: 'verysecret'
+		secret: 'verysecret',
+		store: new mongoStore({
+			db: server.set('db-name')
+		})
+	}));
+	server.use(express.logger({
+		format: '[:date] \x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :response-time ms'
 	}));
 	server.helpers(require('./helpers.js').helpers);
 	server.dynamicHelpers(require('./helpers.js').dynamicHelpers);
@@ -71,21 +73,16 @@ server.configure(function() {
 		messages: require('express-messages')
 	});
 	server.use(express.favicon());
-	server.use(express.logger({
-		format: '[:date] \x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :response-time ms'
-	}));
 	server.use(csrf.check());
-	server.use(express.methodOverride());
 	server.use(express.static(pub));
 	server.use(server.router);
 });
 
 // Load models and connect to DB
-
-var	Download = mongoose.model('Download', models.Download);
-var	User = mongoose.model('User', models.User);
-var	LoginToken = mongoose.model('LoginToken', models.LoginToken);
-var	db = mongoose.connect(server.set('db-uri'));
+var Download = mongoose.model('Download', models.Download);
+var User = mongoose.model('User', models.User);
+var LoginToken = mongoose.model('LoginToken', models.LoginToken);
+var db = mongoose.connect(server.set('db-uri'));
 
 // Setup the errors
 server.error(function(err, req, res, next) {
@@ -227,36 +224,36 @@ server.get('/session/new', function(req, res) {
 
 // Sign-in user submit
 server.post('/session', function(req, res) {
-	User.findOne({
-		email: req.body.user.email
-	},
-	function(err, user) {
-		if (user && user.authenticate(req.body.user.password)) {
-			req.session.regenerate(function() {
-				req.session.user_id = user.id;
-				// Remember me
-				if (req.body.remember_me) {
-					var loginToken = new LoginToken({
-						email: user.email
-					});
-					loginToken.save(function() {
-						res.cookie('logintoken', loginToken.cookieValue, {
-							expires: new Date(Date.now() + 2 * 604800000),
-							path: '/'
-						});
-					});
-				}
-				res.redirect('/downloads');
-			});
-		} else {
-			req.flash('error', 'Authentication failed. Check your email and password.');
-			res.render('session/new', {
-				user: new User({
-					'email': req.body.user.email
-				})
-			});
-		}
-	});
+    User.findOne({
+        email: req.body.user.email
+    },
+    function(err, user) {
+        if (user && user.authenticate(req.body.user.password)) {
+            req.session.regenerate(function() {
+                req.session.user_id = user.id;
+                // Remember me
+                if (req.body.remember_me) {
+                    var loginToken = new LoginToken({
+                        email: user.email
+                    });
+                    loginToken.save(function() {
+                        res.cookie('logintoken', loginToken.cookieValue, {
+                            expires: new Date(Date.now() + 2 * 604800000),
+                            path: '/'
+                        });
+                    });
+                }
+                res.redirect('/downloads');
+            });
+        } else {
+            req.flash('error', 'Authentication failed. Check your email and password.');
+            res.render('session/new', {
+                user: new User({
+                    'email': req.body.user.email
+                })
+            });
+        }
+    });
 });
 
 // Sign-out user
@@ -415,9 +412,9 @@ server.get('/downloads/del/:id', loadUser, function(req, res) {
 	Download.findById(req.params.id, function(err, dl) {
 		if (dl) {
 			if (dl.users.length > 1) {
-                var oldusers = dl.users;
-                oldusers.splice(dl.users.indexOf(req.currentUser.id),1);
-                dl.users = oldusers;
+				var oldusers = dl.users;
+				oldusers.splice(dl.users.indexOf(req.currentUser.id), 1);
+				dl.users = oldusers;
 				dl.save(function(err) {
 					if (err) console.log("server.js New Download - Error saving download: " + err);
 				});
@@ -443,9 +440,9 @@ server.get('/*', function(req, res) {
 });
 
 //////////////////// Run Server ////////////////////
-process.on('uncaughtException', function(err) {
-	console.log(err);
-});
+//process.on('uncaughtException', function(err) {
+	//console.log(err);
+//});
 
 if (!module.parent) {
 	//cluster(server).set('workers', 1).use(cluster.reload()).use(cluster.debug()).listen(8000);

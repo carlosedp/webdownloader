@@ -18,7 +18,8 @@ var Download = new Schema({
 	},
 	'localpath': String,
 	'hash': String,
-	'users': [String]
+	'users': [String],
+	'status': String
 });
 Download.virtual('localurl').get(function() {
 	return config.serverAddress + config.downloadDirSuffix + this.filename;
