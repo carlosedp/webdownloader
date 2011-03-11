@@ -3,13 +3,14 @@ div#logo
     img(src='/images/logo.png')
 div.nav.right
   ul
-    li
-      a(href='/') Home
     - if (signedIn)
       li 
         a(href='/downloads') My Downloads
       li 
         a(href='/user') Settings
+    - else
+      li
+        a(href='/') Home
     li 
       a(href='/help' ) Help
     - if (signedIn)

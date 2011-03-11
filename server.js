@@ -19,12 +19,6 @@ var config = require('./config');
 var downloader = require('./downloader');
 var models = require('./models');
 
-// Local variables
-var db;
-var Download;
-var User;
-var LoginToken;
-
 // Server Configuration
 var serverPort = config.serverPort;
 var DBserverAddress = config.DBserverAddress;
@@ -87,12 +81,11 @@ server.configure(function() {
 });
 
 // Load models and connect to DB
-models.defineModels(mongoose, function() {
-	Download = mongoose.model('Download');
-	User = mongoose.model('User');
-	LoginToken = mongoose.model('LoginToken');
-	db = mongoose.connect(server.set('db-uri'));
-});
+
+var	Download = mongoose.model('Download', models.Download);
+var	User = mongoose.model('User', models.User);
+var	LoginToken = mongoose.model('LoginToken', models.LoginToken);
+var	db = mongoose.connect(server.set('db-uri'));
 
 // Setup the errors
 server.error(function(err, req, res, next) {
