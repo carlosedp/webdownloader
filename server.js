@@ -33,8 +33,8 @@ var server = express.createServer();
 
 // Dev environment
 server.configure('development', function() {
-    server.set('db-name', 'webdownloader-dev');
-	server.set('db-uri', 'mongodb://' + DBserverAddress + '/' +server.set('db-name'));
+	server.set('db-name', 'webdownloader-dev');
+	server.set('db-uri', 'mongodb://' + DBserverAddress + '/' + server.set('db-name'));
 	server.use(express.errorHandler({
 		showStack: true,
 		dumpExceptions: true
@@ -43,8 +43,8 @@ server.configure('development', function() {
 
 // Configure production environment
 server.configure('production', function() {
-    server.set('db-name', 'webdownloader-prod');
-	server.set('db-uri', 'mongodb://' + DBserverAddress + '/' +server.set('db-name'));
+	server.set('db-name', 'webdownloader-prod');
+	server.set('db-uri', 'mongodb://' + DBserverAddress + '/' + server.set('db-name'));
 	server.use(express.errorHandler());
 });
 
@@ -224,38 +224,38 @@ server.get('/session/new', function(req, res) {
 
 // Sign-in user submit
 server.post('/session', function(req, res) {
-    User.findOne({
-        email: req.body.user.email
-    },
-    function(err, user) {
-        if (user && user.authenticate(req.body.user.password)) {
-            req.session.regenerate(function() {
-                req.session.user_id = user.id;
-                // Remember me
-                if (req.body.remember_me) {
-                    var loginToken = new LoginToken({
-                        email: user.email
-                    });
-                    loginToken.save(function() {
-                        res.cookie('logintoken', loginToken.cookieValue, {
-                            expires: new Date(Date.now() + 2 * 604800000),
-                            path: '/'
-                        });
-                        res.redirect('/downloads');
-                    });
-                } else {
-                    res.redirect('/downloads');
-                }
-            });
-        } else {
-            req.flash('error', 'Authentication failed. Check your email and password.');
-            res.render('session/new', {
-                user: new User({
-                    'email': req.body.user.email
-                })
-            });
-        }
-    });
+	User.findOne({
+		email: req.body.user.email
+	},
+	function(err, user) {
+		if (user && user.authenticate(req.body.user.password)) {
+			req.session.regenerate(function() {
+				req.session.user_id = user.id;
+				// Remember me
+				if (req.body.remember_me) {
+					var loginToken = new LoginToken({
+						email: user.email
+					});
+					loginToken.save(function() {
+						res.cookie('logintoken', loginToken.cookieValue, {
+							expires: new Date(Date.now() + 2 * 604800000),
+							path: '/'
+						});
+						res.redirect('/downloads');
+					});
+				} else {
+					res.redirect('/downloads');
+				}
+			});
+		} else {
+			req.flash('error', 'Authentication failed. Check your email and password.');
+			res.render('session/new', {
+				user: new User({
+					'email': req.body.user.email
+				})
+			});
+		}
+	});
 });
 
 // Sign-out user
@@ -312,8 +312,6 @@ server.get('/user', loadUser, function(req, res) {
 // Update user info/settings
 server.put('/user', loadUser, function(req, res) {
 	User.findById(req.currentUser.id, function(err, u) {
-		if (!u) return next(new NotFound('User not found'));
-
 		if (!u.authenticate(req.body.user.password)) {
 			req.flash('error', 'Authentication failed. Check password.');
 			res.redirect('/user');
@@ -326,23 +324,21 @@ server.put('/user', loadUser, function(req, res) {
 				if (req.body.new_password === req.body.new_password_confirm) {
 					u.password = req.body.new_password;
 				} else {
-					req.flash('error', 'New password and confirmation don´t match');
-					res.redirect('/user');
+					return userSaveFailed(err, 'New password and confirmation don´t match');
 				}
 			}
-
-			function userSaveFailed(err) {
-				req.flash('error', 'User update failed.');
-				console.log("Errors: " + err);
-				// TODO indicate failed fields
-				res.redirect('/user');
-			}
-
 			u.save(function(err) {
-				if (err) return userSaveFailed(err);
+				if (err) return userSaveFailed(err, 'Error.');
 				req.flash('info', 'User updated');
 				res.redirect('/downloads');
 			});
+
+			function userSaveFailed(err, msg) {
+				req.flash('error', 'User update failed. ' + msg);
+				console.log("Errors: " + err + 'Err msg: ' + msg);
+				// TODO indicate failed fields
+				res.redirect('/user');
+			}
 		}
 	});
 
@@ -442,9 +438,9 @@ server.get('/*', function(req, res) {
 });
 
 //////////////////// Run Server ////////////////////
-//process.on('uncaughtException', function(err) {
-	//console.log(err);
-//});
+process.on('uncaughtException', function(err) {
+    console.log(err);
+});
 
 if (!module.parent) {
 	//cluster(server).set('workers', 1).use(cluster.reload()).use(cluster.debug()).listen(8000);
