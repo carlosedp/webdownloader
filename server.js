@@ -241,9 +241,11 @@ server.post('/session', function(req, res) {
                             expires: new Date(Date.now() + 2 * 604800000),
                             path: '/'
                         });
+                        res.redirect('/downloads');
                     });
+                } else {
+                    res.redirect('/downloads');
                 }
-                res.redirect('/downloads');
             });
         } else {
             req.flash('error', 'Authentication failed. Check your email and password.');
