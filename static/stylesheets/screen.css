@@ -1,5 +1,4 @@
-@charset "UTF-8";
-/* line 14, C:/Ruby187/lib/ruby/gems/1.8/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 14, ../../../../../../.rvm/gems/ruby-1.9.2-p180/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -19,42 +18,42 @@ table, caption, tbody, tfoot, thead, tr, th, td {
   vertical-align: baseline;
 }
 
-/* line 17, C:/Ruby187/lib/ruby/gems/1.8/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 17, ../../../../../../.rvm/gems/ruby-1.9.2-p180/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 body {
   line-height: 1;
   color: black;
   background: white;
 }
 
-/* line 19, C:/Ruby187/lib/ruby/gems/1.8/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 19, ../../../../../../.rvm/gems/ruby-1.9.2-p180/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 21, C:/Ruby187/lib/ruby/gems/1.8/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 21, ../../../../../../.rvm/gems/ruby-1.9.2-p180/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 table {
   border-collapse: separate;
   border-spacing: 0;
   vertical-align: middle;
 }
 
-/* line 23, C:/Ruby187/lib/ruby/gems/1.8/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 23, ../../../../../../.rvm/gems/ruby-1.9.2-p180/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-/* line 25, C:/Ruby187/lib/ruby/gems/1.8/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 25, ../../../../../../.rvm/gems/ruby-1.9.2-p180/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: "" "";
 }
-/* line 96, C:/Ruby187/lib/ruby/gems/1.8/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 96, ../../../../../../.rvm/gems/ruby-1.9.2-p180/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
 }
 
-/* line 27, C:/Ruby187/lib/ruby/gems/1.8/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 27, ../../../../../../.rvm/gems/ruby-1.9.2-p180/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
 }
@@ -162,15 +161,16 @@ div.nav ul li a:hover {
 
 /* line 91, ../src/screen.scss */
 div.nav.right {
+  display: inline;
   float: right;
 }
 
-/* line 94, ../src/screen.scss */
+/* line 95, ../src/screen.scss */
 div.nav.left {
   float: left;
 }
 
-/* line 97, ../src/screen.scss */
+/* line 98, ../src/screen.scss */
 #content {
   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #e5e3d2), color-stop(100%, #ffffff));
   background-image: -moz-linear-gradient(top, #e5e3d2 0%, #ffffff 100%);
@@ -181,6 +181,10 @@ div.nav.left {
   -ms-border-radius: 10px;
   -khtml-border-radius: 10px;
   border-radius: 10px;
+  -moz-box-shadow: #908e86 2px 2px 10px 0;
+  -webkit-box-shadow: #908e86 2px 2px 10px 0;
+  -o-box-shadow: #908e86 2px 2px 10px 0;
+  box-shadow: #908e86 2px 2px 10px 0;
   background-color: #E5E3D2;
   display: block;
   margin-bottom: 1em;
@@ -192,7 +196,7 @@ div.nav.left {
   vertical-align: baseline;
 }
 
-/* line 113, ../src/screen.scss */
+/* line 115, ../src/screen.scss */
 #footer {
   text-align: center;
   margin-top: 10px;
@@ -200,7 +204,7 @@ div.nav.left {
   margin-right: auto;
 }
 
-/* line 121, ../src/screen.scss */
+/* line 123, ../src/screen.scss */
 div.field label {
   font-size: 1.4em;
   line-height: 1.8em;
@@ -212,7 +216,7 @@ div.field label {
   white-space: nowrap;
   min-width: 5em;
 }
-/* line 132, ../src/screen.scss */
+/* line 134, ../src/screen.scss */
 div.field input {
   font-family: "Cantarell", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
   font-size: 1.1em;
@@ -227,12 +231,12 @@ div.field input {
   -khtml-border-radius: 2px;
   border-radius: 2px;
 }
-/* line 140, ../src/screen.scss */
+/* line 142, ../src/screen.scss */
 div.field input:focus {
   background: #feffb7;
 }
 
-/* line 147, ../src/screen.scss */
+/* line 149, ../src/screen.scss */
 .info, .success, .warning, .error, .validation {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -249,42 +253,42 @@ div.field input:focus {
   list-style: circle;
 }
 
-/* line 157, ../src/screen.scss */
+/* line 159, ../src/screen.scss */
 .info {
   color: #00529B;
   background-color: #BDE5F8;
   background-image: url("/images/info.png");
 }
 
-/* line 162, ../src/screen.scss */
+/* line 164, ../src/screen.scss */
 .success {
   color: #4F8A10;
   background-color: #DFF2BF;
   background-image: url("/images/success.png");
 }
 
-/* line 167, ../src/screen.scss */
+/* line 169, ../src/screen.scss */
 .warning {
   color: #9F6000;
   background-color: #FEEFB3;
   background-image: url("/images/warning.png");
 }
 
-/* line 172, ../src/screen.scss */
+/* line 174, ../src/screen.scss */
 .error {
   color: #D8000C;
   background-color: #FFBABA;
   background-image: url("/images/error.png");
 }
 
-/* line 177, ../src/screen.scss */
+/* line 179, ../src/screen.scss */
 .validation {
   color: #D63301;
   background-color: #FFCCBA;
   background-image: url("/images/validation.png");
 }
 
-/* line 218, ../src/screen.scss */
+/* line 220, ../src/screen.scss */
 .signup_button {
   color: #fef4e9;
   display: inline-block;
@@ -315,7 +319,7 @@ div.field input:focus {
   background-image: -moz-linear-gradient(top, #faa51a 0%, #f47a20 100%);
   background-image: linear-gradient(top, #faa51a 0%, #f47a20 100%);
 }
-/* line 204, ../src/screen.scss */
+/* line 206, ../src/screen.scss */
 .signup_button:hover {
   text-decoration: none;
   background: #f47c20;
@@ -324,7 +328,7 @@ div.field input:focus {
   background-image: -moz-linear-gradient(top, #f88e11 0%, #f06015 100%);
   background-image: linear-gradient(top, #f88e11 0%, #f06015 100%);
 }
-/* line 210, ../src/screen.scss */
+/* line 212, ../src/screen.scss */
 .signup_button:active {
   position: relative;
   top: 1px;
@@ -334,7 +338,7 @@ div.field input:focus {
   background-image: linear-gradient(top, #f47a20 0%, #faa51a 100%);
 }
 
-/* line 222, ../src/screen.scss */
+/* line 224, ../src/screen.scss */
 .signin_button {
   color: #fef4e9;
   display: inline-block;
@@ -367,7 +371,7 @@ div.field input:focus {
   font-size: 1.2em;
   margin-left: 150px;
 }
-/* line 204, ../src/screen.scss */
+/* line 206, ../src/screen.scss */
 .signin_button:hover {
   text-decoration: none;
   background: #f47c20;
@@ -376,7 +380,7 @@ div.field input:focus {
   background-image: -moz-linear-gradient(top, #f88e11 0%, #f06015 100%);
   background-image: linear-gradient(top, #f88e11 0%, #f06015 100%);
 }
-/* line 210, ../src/screen.scss */
+/* line 212, ../src/screen.scss */
 .signin_button:active {
   position: relative;
   top: 1px;
@@ -386,7 +390,7 @@ div.field input:focus {
   background-image: linear-gradient(top, #f47a20 0%, #faa51a 100%);
 }
 
-/* line 228, ../src/screen.scss */
+/* line 230, ../src/screen.scss */
 .download_button {
   color: #fef4e9;
   display: inline-block;
@@ -418,7 +422,7 @@ div.field input:focus {
   background-image: linear-gradient(top, #faa51a 0%, #f47a20 100%);
   font-size: 1.2em;
 }
-/* line 204, ../src/screen.scss */
+/* line 206, ../src/screen.scss */
 .download_button:hover {
   text-decoration: none;
   background: #f47c20;
@@ -427,7 +431,7 @@ div.field input:focus {
   background-image: -moz-linear-gradient(top, #f88e11 0%, #f06015 100%);
   background-image: linear-gradient(top, #f88e11 0%, #f06015 100%);
 }
-/* line 210, ../src/screen.scss */
+/* line 212, ../src/screen.scss */
 .download_button:active {
   position: relative;
   top: 1px;
@@ -437,7 +441,7 @@ div.field input:focus {
   background-image: linear-gradient(top, #f47a20 0%, #faa51a 100%);
 }
 
-/* line 233, ../src/screen.scss */
+/* line 235, ../src/screen.scss */
 div.gravatar {
   border: 1px solid #E5DECC;
   -moz-border-radius: 4px;
@@ -453,28 +457,28 @@ div.gravatar {
   margin-bottom: 10px;
   overflow: auto;
 }
-/* line 243, ../src/screen.scss */
+/* line 245, ../src/screen.scss */
 div.gravatar img {
   float: left;
   padding: 2px;
 }
-/* line 248, ../src/screen.scss */
+/* line 250, ../src/screen.scss */
 div.gravatar p {
   float: right;
   width: 200px;
 }
-/* line 252, ../src/screen.scss */
+/* line 254, ../src/screen.scss */
 div.gravatar small {
   font-size: 0.9em;
 }
 
-/* line 257, ../src/screen.scss */
+/* line 259, ../src/screen.scss */
 div#downloads {
   display: inline-block;
   padding: 0 0.7em;
   white-space: nowrap;
 }
-/* line 262, ../src/screen.scss */
+/* line 264, ../src/screen.scss */
 div#downloads ul {
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
@@ -487,43 +491,43 @@ div#downloads ul {
   padding: 3px;
   width: 750px;
 }
-/* line 269, ../src/screen.scss */
+/* line 271, ../src/screen.scss */
 div#downloads ul li {
   list-style-type: none;
   display: inline-block;
   padding: 0.2em 0.2em;
 }
-/* line 277, ../src/screen.scss */
+/* line 279, ../src/screen.scss */
 div#downloads ul li a:visited {
   color: #09c;
 }
-/* line 280, ../src/screen.scss */
+/* line 282, ../src/screen.scss */
 div#downloads ul li a:hover {
   text-decoration: underline;
 }
-/* line 285, ../src/screen.scss */
+/* line 287, ../src/screen.scss */
 div#downloads ul span {
   margin-left: 15px;
   font-weight: 600;
 }
-/* line 289, ../src/screen.scss */
+/* line 291, ../src/screen.scss */
 div#downloads ul li.file {
   width: 35%;
 }
-/* line 292, ../src/screen.scss */
+/* line 294, ../src/screen.scss */
 div#downloads ul li.size {
   width: 15%;
 }
-/* line 298, ../src/screen.scss */
+/* line 300, ../src/screen.scss */
 div#downloads ul li.source {
   font-size: 0.7em;
 }
-/* line 301, ../src/screen.scss */
+/* line 303, ../src/screen.scss */
 div#downloads ul li.remove {
   float: right;
   text-align: right;
 }
-/* line 304, ../src/screen.scss */
+/* line 306, ../src/screen.scss */
 div#downloads ul li.remove img {
   cursor: pointer;
   padding-right: 5px;

@@ -10,7 +10,7 @@ var mongoStore = require('connect-mongo');
 var gravatar = require('node-gravatar');
 
 // Form validation lib
-var form = require("express-form");
+var form = require('express-form');
 var filter = form.filter;
 var validate = form.validate;
 
@@ -286,7 +286,7 @@ server.post('/user', function(req, res) {
 	function userSaveFailed(err) {
 		req.flash('error', 'Account creation failed.');
 		// TODO indicate failed fields
-		console.log("Errors: " + err);
+		console.log('Errors: ' + err);
 		res.render('user/new', {
 			user: user
 		});
@@ -335,7 +335,7 @@ server.put('/user', loadUser, function(req, res) {
 
 			function userSaveFailed(err, msg) {
 				req.flash('error', 'User update failed. ' + msg);
-				console.log("Errors: " + err + 'Err msg: ' + msg);
+				console.log('Errors: ' + err + 'Err msg: ' + msg);
 				// TODO indicate failed fields
 				res.redirect('/user');
 			}
@@ -365,7 +365,7 @@ server.get('/downloads', loadUser, function(req, res) {
 })
 
 // Submit new download
-server.post('/downloads', loadUser, form(validate("url").required().isUrl("The download link is invalid.")), function(req, res) {
+server.post('/downloads', loadUser, form(validate('url').required().isUrl('The download link is invalid.')), function(req, res) {
 	if (!req.form.isValid) {
 		res.redirect('/downloads/');
 	} else {
@@ -379,7 +379,7 @@ server.post('/downloads', loadUser, form(validate("url").required().isUrl("The d
 				} else {
 					dl.users.push(req.currentUser.id);
 					dl.save(function(err) {
-						if (err) console.log("server.js Existing download - Error saving download: " + err);
+						if (err) console.log('server.js Existing download - Error saving download: ' + err);
 					});
 				}
 			} else {
@@ -388,10 +388,10 @@ server.post('/downloads', loadUser, form(validate("url").required().isUrl("The d
 				});
 				d.users.push(req.currentUser.id);
 				d.save(function(err) {
-					if (err) console.log("server.js New Download - Error saving download: " + err);
+					if (err) console.log('server.js New Download - Error saving download: ' + err);
 				});
 				req.flash('success', 'Download for the file ' + d.url + ' scheduled.');
-				console.log("Download file:", d.url);
+				console.log('Download file:', d.url);
 				downloader.downloadFile(d);
 			}
 			res.redirect('/downloads/');
@@ -414,13 +414,13 @@ server.get('/downloads/del/:id', loadUser, function(req, res) {
 				oldusers.splice(dl.users.indexOf(req.currentUser.id), 1);
 				dl.users = oldusers;
 				dl.save(function(err) {
-					if (err) console.log("server.js New Download - Error saving download: " + err);
+					if (err) console.log('server.js New Download - Error saving download: ' + err);
 				});
 			} else {
 				dl.remove();
 			}
 		} else {
-			console.log("Download does not exist. " + err);
+			console.log('Download does not exist. ' + err);
 		}
 	});
 	res.redirect('/downloads/');
@@ -439,12 +439,12 @@ server.get('/*', function(req, res) {
 
 //////////////////// Run Server ////////////////////
 process.on('uncaughtException', function(err) {
-    console.log(err);
+	console.log(err);
 });
 
 if (!module.parent) {
 	//cluster(server).set('workers', 1).use(cluster.reload()).use(cluster.debug()).listen(8000);
 	server.listen(serverPort);
-	console.log("Express server listening on port %d, environment: %s", server.address().port, server.settings.env);
+	console.log('Express server listening on port %d, environment: %s', server.address().port, server.settings.env);
 }
 
