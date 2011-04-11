@@ -107,6 +107,7 @@ a {
 #content {
     @include linear-gradient(color-stops(#E5E3D2, white));
     @include border-radius(10px);
+    @include box-shadow(#908E86, 2px, 2px, 10px);
     background-color: #E5E3D2;
     display: block;
     //font-size: 120%;
