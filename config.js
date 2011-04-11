@@ -7,3 +7,5 @@ exports.serverAddress = 'http://localhost:' + this.serverPort;
 exports.downloadDirSuffix = '/downloadedFiles/';
 exports.downloadDir = __dirname + this.downloadDirSuffix;
 
+exports.SMTPserver = 'localhost';
+exports.SMTPport = '25';

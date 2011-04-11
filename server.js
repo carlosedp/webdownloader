@@ -19,22 +19,11 @@ var config = require('./config');
 var downloader = require('./downloader');
 var models = require('./models');
 
-// Server Configuration
-var serverPort = config.serverPort;
-var DBserverAddress = config.DBserverAddress;
-var pub = config.pub;
-var Settings = {
-	development: {},
-	test: {},
-	production: {}
-};
-
 var server = express.createServer();
 
 // Dev environment
 server.configure('development', function() {
 	server.set('db-name', 'webdownloader-dev');
-	server.set('db-uri', 'mongodb://' + DBserverAddress + '/' + server.set('db-name'));
 	server.use(express.errorHandler({
 		showStack: true,
 		dumpExceptions: true
@@ -44,7 +33,6 @@ server.configure('development', function() {
 // Configure production environment
 server.configure('production', function() {
 	server.set('db-name', 'webdownloader-prod');
-	server.set('db-uri', 'mongodb://' + DBserverAddress + '/' + server.set('db-name'));
 	server.use(express.errorHandler());
 });
 
@@ -52,13 +40,15 @@ server.configure('production', function() {
 server.configure(function() {
 	server.set('views', __dirname + '/views');
 	server.set('view engine', 'jade');
+	server.set('db-uri', 'mongodb://' + config.DBserverAddress + '/' + server.set('db-name'));
 	server.use(express.bodyParser());
 	server.use(express.methodOverride());
 	server.use(express.cookieParser());
 	server.use(express.session({
 		secret: 'verysecret',
 		store: new mongoStore({
-			db: server.set('db-name')
+            host: config.DBserverAddress,
+            db: server.set('db-name')
 		})
 	}));
 	server.use(express.logger({
@@ -74,7 +64,7 @@ server.configure(function() {
 	});
 	server.use(express.favicon());
 	server.use(csrf.check());
-	server.use(express.static(pub));
+	server.use(express.static(config.pub));
 	server.use(server.router);
 });
 
@@ -161,16 +151,6 @@ function loadUser(req, res, next) {
 	} else {
 		res.redirect('/session/new');
 	}
-}
-
-function isUrl(url) {
-	var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-	return regexp.test(url);
-}
-
-function isEmail(email) {
-	var regexp = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-	return regexp.test(email);
 }
 
 /////////////////////////////////////////
@@ -444,7 +424,7 @@ process.on('uncaughtException', function(err) {
 
 if (!module.parent) {
 	//cluster(server).set('workers', 1).use(cluster.reload()).use(cluster.debug()).listen(8000);
-	server.listen(serverPort);
+	server.listen(config.serverPort);
 	console.log("Express server listening on port %d, environment: %s", server.address().port, server.settings.env);
 }
 

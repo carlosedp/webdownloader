@@ -2,12 +2,10 @@ var mongoose = require('mongoose');
 var crypto = require('crypto');
 var config = require('./config');
 
-var Schema = mongoose.Schema;
-
 /**
 * Model: Download
 */
-var Download = new Schema({
+var Download = new mongoose.Schema({
 	'filename': String,
 	'filesize': Number,
 	'url': String,
@@ -37,7 +35,7 @@ function toLower(v) {
 	return v.toLowerCase();
 }
 
-var User = new Schema({
+var User = new mongoose.Schema({
 	'email': {
 		type: String,
 		set: toLower,
@@ -93,7 +91,7 @@ User.pre('save', function(next) {
 *
 * Used for session persistence.
 */
-var LoginToken = new Schema({
+var LoginToken = new mongoose.Schema({
 	email: {
 		type: String,
 		index: true
@@ -134,4 +132,3 @@ LoginToken.virtual('cookieValue').get(function() {
 mongoose.model('Download', Download);
 mongoose.model('User', User);
 mongoose.model('LoginToken', LoginToken);
-
