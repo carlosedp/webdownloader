@@ -1,4 +1,4 @@
-@import "compass/reset"; 
+@import "compass/reset";
 @import "compass";
 
 $font-family: 'Cantarell', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
@@ -22,12 +22,12 @@ h1 {
     font-size: 2.5em;
     font-weight: 300;
     margin-bottom: 15px;
-    text-shadow: 1px 1px 0 white; 
+    text-shadow: 1px 1px 0 white;
 }
 
 h2 {
     font-size: 2em;
-    font-weight: 300; 
+    font-weight: 300;
 }
 
 h3 {
@@ -37,7 +37,7 @@ h3 {
     span {
         font-size: 17px !important;
         color: #888888 !important;
-}
+    }
 }
 
 
@@ -46,7 +46,7 @@ a {
     text-decoration: none;
     &:hover {
         text-decoration: underline;
-}
+    }
 }
 
 #header {
@@ -80,13 +80,13 @@ div.nav {
 
                 &:visited {
                     color: #09c;
-        }
-        &:hover {
-            text-decoration: underline;
+                }
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
         }
     }
-}
-}
 }
 div.nav.right {
     display: inline;
@@ -130,19 +130,19 @@ div.field {
         text-align: left;
         white-space: nowrap;
         min-width: 5em;
-}
-input {
-    font-family: $font-family; 
-    font-size: 1.1em;
-    font-weight: 500;
-    width: 250px;
-    padding: 3px 5px;
-    border: inset 1px #CCC;
-    @include border-radius(2px);
-    &:focus {
-        background: #feffb7;
-}
-}
+    }
+    input {
+        font-family: $font-family;
+        font-size: 1.1em;
+        font-weight: 500;
+        width: 250px;
+        padding: 3px 5px;
+        border: inset 1px #CCC;
+        @include border-radius(2px);
+        &:focus {
+            background: #feffb7;
+        }
+    }
 }
 
 
@@ -208,13 +208,13 @@ input {
         background: #f47c20;
         color: #fef4e9;
         @include linear-gradient(color-stops(#f88e11, #f06015));
-}
-&:active {
-    position: relative;
-    top: 1px;
-    color: #fcd3a5;
-    @include linear-gradient(color-stops(#f47a20, #faa51a)); 
-}
+    }
+    &:active {
+        position: relative;
+        top: 1px;
+        color: #fcd3a5;
+        @include linear-gradient(color-stops(#f47a20, #faa51a));
+    }
 }
 
 .signup_button {
@@ -245,15 +245,15 @@ div.gravatar {
     img {
         float: left;
         padding: 2px;
-}
+    }
 
-p {
-    float: right;
-    width: 200px;
-}
-small {
-    font-size: 0.9em;
-}
+    p {
+        float: right;
+        width: 200px;
+    }
+    small {
+        font-size: 0.9em;
+    }
 }
 
 div#downloads {
@@ -278,37 +278,37 @@ div#downloads {
 
                 &:visited {
                     color: #09c;
+                }
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
         }
-        &:hover {
-            text-decoration: underline;
+        span {
+            margin-left: 15px;
+            font-weight: 600;
         }
-    }
-}
-span {
-    margin-left: 15px;
-    font-weight: 600;
-}
-li.file {
-    width: 35%;
-}
-li.size {
-    width: 15%;
-}
-li.date {
+        li.file {
+            width: 35%;
+        }
+        li.size {
+            width: 15%;
+        }
+        li.date {
 
-}
-li.source {
-    font-size: 0.7em;
-}
-li.remove {
-    float: right;
-    text-align: right;
-    img {
-        cursor: pointer;
-        padding-right: 5px;
-        vertical-align: text-top;
+        }
+        li.source {
+            font-size: 0.7em;
+        }
+        li.remove {
+            float: right;
+            text-align: right;
+            img {
+                cursor: pointer;
+                padding-right: 5px;
+                vertical-align: text-top;
+            }
+        }
     }
-}
-}
 }
 
