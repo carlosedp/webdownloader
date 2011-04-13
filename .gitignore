@@ -1,4 +1,5 @@
 downloadedFiles/*
 static/.sass-cache/*
+static/stylesheets/*
 logs/*
 
