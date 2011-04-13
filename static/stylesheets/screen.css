@@ -61,7 +61,7 @@ a img {
 
 /* line 6, ../src/screen.scss */
 html body {
-  font-family: "Century Gothic", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+  font-family: "Cantarell", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
   background-color: #adf;
   -webkit-font-smoothing: antialiased;
   line-height: 1;
@@ -230,7 +230,7 @@ div.field label {
 }
 /* line 143, ../src/screen.scss */
 div.field input {
-  font-family: "Century Gothic", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+  font-family: "Cantarell", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
   font-size: 1.1em;
   font-weight: 500;
   width: 250px;
