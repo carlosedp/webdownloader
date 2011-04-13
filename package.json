@@ -7,18 +7,20 @@
   "directories": {
   },
   "engines": {
-    "node": ">= 0.2.6"
+    "node": ">= 0.4.4"
   },
   "dependencies": {
-    "cluster": "0.4.0",
-    "connect-mongo": "0.1.0",
-    "express": "2.0.0",
-    "express-form": "0.5.1",
-    "jade": "0.8.5",
-    "mongoose": "1.1.4",
-    "node-gravatar": "1.0.0",
+    "cluster": "0.5.2",
+    "connect-mongo": "0.1.1",
+    "express": "2.1.1",
     "express-csrf": "0.2.0",
-    "express-messages": "0.0.1"
+    "express-messages": "0.0.1",
+    "express-form": "0.5.3",
+    "jade": "0.10.1",
+    "mailer": "0.4.52",
+    "mongoose": "1.1.16",
+    "node-gravatar": "1.0.0",
+    "node-dev": ">=0.0.6"
   }
 }
 

@@ -1,7 +1,7 @@
 @import "compass/reset";
 @import "compass";
 
-$font-family: 'Cantarell', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
+$font-family: 'Century Gothic', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
 
 html body {
     font-family: $font-family;
@@ -50,22 +50,32 @@ a {
 }
 
 #header {
-    display: block;
+    width: 100%;
+    height: 40px;
     padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#logo-block {
+    float: left;
 }
 
 #logo {
-    display: inline-block;
+    margin: 0px;
+    width: 169px;
+    height: 70px;
+    text-indent: -9999px;
+    display: block;
+    background: transparent url(/images/logo.png) no-repeat;
 }
 
-div.nav {
+#nav {
     @include border-radius(10px);
     display: inline-block;
     background-color: white;
     padding: 0 0.7em;
     white-space: nowrap;
     font-weight: 600;
-
     ul {
         margin: 0;
         padding: 0;
@@ -88,11 +98,15 @@ div.nav {
         }
     }
 }
+<<<<<<< HEAD
 div.nav.right {
     display: inline;
+=======
+.right {
+>>>>>>> ae0e6d38fbca69c4a8021afd03668d703e6e4714
     float: right;
 }
-div.nav.left {
+.left {
     float: left;
 }
 #content {
