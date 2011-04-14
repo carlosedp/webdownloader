@@ -416,14 +416,18 @@ server.post('/downloads', loadUser, form(validate('url').required().isUrl('The d
 			url: req.form.url
 		},
 		function(err, d) {
-			if (d) {
-				if (d.users.indexOf(req.currentUser.id) != - 1) {
+            if (d) {
+                // If Download exists
+                if (d.users.indexOf(req.currentUser.id) != - 1) {
+                    // User already have this download
 					req.flash('error', 'Download already exists.');
-				} else {
+                } else {
+                    // Just push this user into download users
 					console.log("Download already exists, pushing user:", "into file", req.currentUser.email, d.url);
 					d.users.push(req.currentUser.id);
 				}
-			} else {
+            } else {
+                // Download does not exist
 				var d = new Download({
 					url: req.body.url
 				});
