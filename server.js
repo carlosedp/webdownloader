@@ -13,7 +13,7 @@ var mailer = require('mailer');
 var jade = require('jade');
 
 // Form validation lib
-var form = require("express-form");
+var form = require('express-form');
 var filter = form.filter;
 var validate = form.validate;
 
@@ -328,7 +328,7 @@ server.post('/user', function(req, res) {
 	function userSaveFailed(err) {
 		req.flash('error', 'Account creation failed.');
 		// TODO indicate failed fields
-		console.log("Errors: " + err);
+		console.log('Errors: ' + err);
 		res.render('user/new', {
 			user: user
 		});
@@ -378,7 +378,7 @@ server.put('/user', loadUser, function(req, res) {
 
 			function userSaveFailed(err, msg) {
 				req.flash('error', 'User update failed. ' + msg);
-				console.log("Errors: " + err + 'Err msg: ' + msg);
+				console.log('Errors: ' + err + 'Err msg: ' + msg);
 				// TODO indicate failed fields
 				res.redirect('/user');
 			}
@@ -408,7 +408,7 @@ server.get('/downloads', loadUser, function(req, res) {
 })
 
 // Submit new download
-server.post('/downloads', loadUser, form(validate("url").required().isUrl("The download link is invalid.")), function(req, res) {
+server.post('/downloads', loadUser, form(validate('url').required().isUrl('The download link is invalid.')), function(req, res) {
 	if (!req.form.isValid) {
 		res.redirect('/downloads/');
 	} else {
@@ -428,7 +428,7 @@ server.post('/downloads', loadUser, form(validate("url").required().isUrl("The d
 					url: req.body.url
 				});
 				d.users.push(req.currentUser.id);
-				console.log("Download file:", d.url);
+				console.log('Download file:', d.url);
 				downloader.downloadFile(d);
 			}
 		d.save(function(err) {
@@ -455,13 +455,13 @@ server.get('/downloads/del/:id', loadUser, function(req, res) {
 				oldusers.splice(dl.users.indexOf(req.currentUser.id), 1);
 				dl.users = oldusers;
 				dl.save(function(err) {
-					if (err) console.log("server.js New Download - Error saving download: " + err);
+					if (err) console.log('server.js New Download - Error saving download: ' + err);
 				});
 			} else {
 				dl.remove();
 			}
 		} else {
-			console.log("Download does not exist. " + err);
+			console.log('Download does not exist. ' + err);
 		}
 	});
 	res.redirect('/downloads/');
