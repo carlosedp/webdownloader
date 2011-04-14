@@ -20,7 +20,8 @@
     "mailer": "0.4.52",
     "mongoose": "1.1.16",
     "node-gravatar": "1.0.0",
-    "node-dev": ">=0.0.6"
+    "node-dev": ">=0.0.6",
+    "mailer": ">=0.4.52",
   }
 }
 

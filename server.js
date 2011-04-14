@@ -8,6 +8,9 @@ var crypto = require('crypto');
 var mongoose = require('mongoose');
 var mongoStore = require('connect-mongo');
 var gravatar = require('node-gravatar');
+var path = require('path');
+var mailer = require('mailer');
+var jade = require('jade');
 
 // Form validation lib
 var form = require("express-form");
@@ -18,6 +21,7 @@ var validate = form.validate;
 var config = require('./config');
 var downloader = require('./downloader');
 var models = require('./models');
+var mailer = require('mailer');
 
 var server = express.createServer();
 
@@ -41,14 +45,19 @@ server.configure(function() {
 	server.set('views', __dirname + '/views');
 	server.set('view engine', 'jade');
 	server.set('db-uri', 'mongodb://' + config.DBserverAddress + '/' + server.set('db-name'));
+	server.set('mailOptions', {
+		host: 'localhost',
+		port: '25',
+		from: 'download@downloadit4.me',
+	});
 	server.use(express.bodyParser());
 	server.use(express.methodOverride());
 	server.use(express.cookieParser());
 	server.use(express.session({
 		secret: 'verysecret',
 		store: new mongoStore({
-            host: config.DBserverAddress,
-            db: server.set('db-name')
+			host: config.DBserverAddress,
+			db: server.set('db-name')
 		})
 	}));
 	server.use(express.logger({
@@ -152,6 +161,59 @@ function loadUser(req, res, next) {
 		res.redirect('/session/new');
 	}
 }
+
+var emailer = {
+	send: function(template, mailOptions, templateOptions) {
+		mailOptions.to = mailOptions.to;
+		jade.renderFile(path.join(__dirname, 'views', 'mailer', template), templateOptions, function(err, text) {
+			// Add the rendered Jade template to the mailOptions
+			mailOptions.body = text;
+
+			// Merge the app's mail options
+			var keys = Object.keys(server.set('mailOptions'));
+			var k;
+			for (var i = 0, len = keys.length; i < len; i++) {
+				k = keys[i];
+				if (!mailOptions.hasOwnProperty(k)) mailOptions[k] = server.set('mailOptions')[k]
+			}
+
+			console.log('[SENDING MAIL]', sys.inspect(mailOptions));
+
+			// Only send mails in production
+			if (server.settings.env == 'production') {
+				mailer.send(mailOptions, function(err, result) {
+					if (err) {
+						console.log(err);
+					}
+				});
+			}
+		});
+	},
+
+	sendWelcome: function(user) {
+		this.send('welcome.jade', {
+			to: user.email,
+			subject: 'Welcome to Downloadit4me!'
+		},
+		{
+			locals: {
+				user: user
+			}
+		});
+	},
+	sendDownload: function(user, download) {
+		this.send('download.jade', {
+			to: user.email,
+			subject: 'Downloadit4me - Grab your download'
+		},
+		{
+			locals: {
+				user: user,
+				download: download,
+			}
+		});
+	},
+};
 
 /////////////////////////////////////////
 //              API                   //
@@ -276,6 +338,7 @@ server.post('/user', function(req, res) {
 		if (err) return userSaveFailed(err);
 
 		req.flash('info', 'Your account has been created');
+		emailer.sendWelcome(user);
 		req.session.user_id = user.id;
 		res.redirect('/downloads');
 	});
@@ -352,32 +415,30 @@ server.post('/downloads', loadUser, form(validate("url").required().isUrl("The d
 		Download.findOne({
 			url: req.form.url
 		},
-		function(err, dl) {
-			if (dl) {
-				if (dl.users.indexOf(req.currentUser.id) != - 1) {
+		function(err, d) {
+			if (d) {
+				if (d.users.indexOf(req.currentUser.id) != - 1) {
 					req.flash('error', 'Download already exists.');
 				} else {
-					dl.users.push(req.currentUser.id);
-					dl.save(function(err) {
-						if (err) console.log("server.js Existing download - Error saving download: " + err);
-					});
+					console.log("Download already exists, pushing user:", "into file", req.currentUser.email, d.url);
+					d.users.push(req.currentUser.id);
 				}
 			} else {
 				var d = new Download({
 					url: req.body.url
 				});
 				d.users.push(req.currentUser.id);
-				d.save(function(err) {
-					if (err) console.log("server.js New Download - Error saving download: " + err);
-				});
-				req.flash('success', 'Download for the file ' + d.url + ' scheduled.');
 				console.log("Download file:", d.url);
 				downloader.downloadFile(d);
 			}
-			res.redirect('/downloads/');
+		d.save(function(err) {
+			if (err) console.log("server.js Download - Error saving download: " + err);
+		});
+		req.flash('success', 'Download for the file ' + d.url + ' scheduled.');
+		emailer.sendDownload(req.currentUser, d);
 		});
 	}
-
+	res.redirect('/downloads/');
 });
 
 // Returns the download info page
@@ -419,7 +480,7 @@ server.get('/*', function(req, res) {
 
 //////////////////// Run Server ////////////////////
 process.on('uncaughtException', function(err) {
-    console.log(err);
+	console.log(err);
 });
 
 if (!module.parent) {
