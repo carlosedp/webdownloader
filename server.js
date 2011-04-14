@@ -424,12 +424,7 @@ process.on('uncaughtException', function(err) {
 
 if (!module.parent) {
 	//cluster(server).set('workers', 1).use(cluster.reload()).use(cluster.debug()).listen(8000);
-<<<<<<< HEAD
-	server.listen(serverPort);
-	console.log('Express server listening on port %d, environment: %s', server.address().port, server.settings.env);
-=======
 	server.listen(config.serverPort);
 	console.log("Express server listening on port %d, environment: %s", server.address().port, server.settings.env);
->>>>>>> ae0e6d38fbca69c4a8021afd03668d703e6e4714
 }
 
