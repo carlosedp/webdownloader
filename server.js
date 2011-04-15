@@ -8,9 +8,6 @@ var crypto = require('crypto');
 var mongoose = require('mongoose');
 var mongoStore = require('connect-mongo');
 var gravatar = require('node-gravatar');
-var path = require('path');
-var mailer = require('mailer');
-var jade = require('jade');
 
 // Form validation lib
 var form = require('express-form');
@@ -21,7 +18,7 @@ var validate = form.validate;
 var config = require('./config');
 var downloader = require('./downloader');
 var models = require('./models');
-var mailer = require('mailer');
+var emailer = require('./emailer').emailer;
 
 var server = express.createServer();
 
@@ -45,11 +42,6 @@ server.configure(function() {
 	server.set('views', __dirname + '/views');
 	server.set('view engine', 'jade');
 	server.set('db-uri', 'mongodb://' + config.DBserverAddress + '/' + server.set('db-name'));
-	server.set('mailOptions', {
-		host: 'localhost',
-		port: '25',
-		from: 'download@downloadit4.me',
-	});
 	server.use(express.bodyParser());
 	server.use(express.methodOverride());
 	server.use(express.cookieParser());
@@ -161,59 +153,6 @@ function loadUser(req, res, next) {
 		res.redirect('/session/new');
 	}
 }
-
-var emailer = {
-	send: function(template, mailOptions, templateOptions) {
-		mailOptions.to = mailOptions.to;
-		jade.renderFile(path.join(__dirname, 'views', 'mailer', template), templateOptions, function(err, text) {
-			// Add the rendered Jade template to the mailOptions
-			mailOptions.body = text;
-
-			// Merge the app's mail options
-			var keys = Object.keys(server.set('mailOptions'));
-			var k;
-			for (var i = 0, len = keys.length; i < len; i++) {
-				k = keys[i];
-				if (!mailOptions.hasOwnProperty(k)) mailOptions[k] = server.set('mailOptions')[k]
-			}
-
-			console.log('[SENDING MAIL]', sys.inspect(mailOptions));
-
-			// Only send mails in production
-			if (server.settings.env == 'production') {
-				mailer.send(mailOptions, function(err, result) {
-					if (err) {
-						console.log(err);
-					}
-				});
-			}
-		});
-	},
-
-	sendWelcome: function(user) {
-		this.send('welcome.jade', {
-			to: user.email,
-			subject: 'Welcome to Downloadit4me!'
-		},
-		{
-			locals: {
-				user: user
-			}
-		});
-	},
-	sendDownload: function(user, download) {
-		this.send('download.jade', {
-			to: user.email,
-			subject: 'Downloadit4me - Grab your download'
-		},
-		{
-			locals: {
-				user: user,
-				download: download,
-			}
-		});
-	},
-};
 
 /////////////////////////////////////////
 //              API                   //
@@ -425,6 +364,7 @@ server.post('/downloads', loadUser, form(validate('url').required().isUrl('The d
                     // Just push this user into download users
 					console.log("Download already exists, pushing user:", "into file", req.currentUser.email, d.url);
 					d.users.push(req.currentUser.id);
+                    emailer.sendDownload(req.currentUser, d);
 				}
             } else {
                 // Download does not exist
@@ -433,13 +373,12 @@ server.post('/downloads', loadUser, form(validate('url').required().isUrl('The d
 				});
 				d.users.push(req.currentUser.id);
 				console.log('Download file:', d.url);
-				downloader.downloadFile(d);
+                downloader.downloadFile(d, req.currentUser.id);
 			}
 		d.save(function(err) {
 			if (err) console.log("server.js Download - Error saving download: " + err);
 		});
 		req.flash('success', 'Download for the file ' + d.url + ' scheduled.');
-		emailer.sendDownload(req.currentUser, d);
 		});
 	}
 	res.redirect('/downloads/');

@@ -2,11 +2,12 @@ var http = require("http");
 var url = require("url");
 var fs = require("fs");
 var config = require('./config');
+var emailer = require('./emailer').emailer;
 
 var downloadDirSuffix = config.downloadDirSuffix;
 var downloadDir = config.downloadDir;
 
-exports.downloadFile = function(d) {
+exports.downloadFile = function(d, user) {
 	var hostname = url.parse(d.url).hostname;
 	var pathname = url.parse(d.url).pathname;
 	var filename = url.parse(d.url).pathname.split("/").pop();
@@ -25,7 +26,7 @@ exports.downloadFile = function(d) {
 	request.end();
 	request.on('response', function(response) {
 		var filesize = response.headers['content-length'];
-        if (filesize >= 50000 || response.statusCode != 200) {
+        if (filesize >= 100000 || response.statusCode != 200) {
             console.log("Download cancelled. File too big or is a redirect.");
             console.log(response);
 			return;
@@ -55,6 +56,7 @@ exports.downloadFile = function(d) {
 					clearInterval(downloadId);
 					d.save(function(err) {
 						if (err) console.log("downloader.js - Error saving download:" + err);
+                        emailer.sendDownload(user, d);
 					});
 				});
 			});

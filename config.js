@@ -7,5 +7,10 @@ exports.serverAddress = 'http://localhost:' + this.serverPort;
 exports.downloadDirSuffix = '/downloadedFiles/';
 exports.downloadDir = __dirname + this.downloadDirSuffix;
 
-exports.SMTPserver = 'localhost';
-exports.SMTPport = '25';
+exports.mailOptions = {
+	host: 'localhost',
+	port: '25',
+	from: 'download@downloadit4.me',
+};
+
+
