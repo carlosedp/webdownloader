@@ -1,9 +1,17 @@
 ﻿var sys = require('sys');
 var path = require('path');
-var mailer = require('mailer');
 var jade = require('jade');
-
+// Temporarily load module from local deps until npm is fixed
+var nodemailer = require('./deps/nodemailer/lib/mail');
 var config = require('./config');
+
+nodemailer.SMTP = {
+	host: config.mailOptions.host,
+	port: config.mailOptions.port,
+	use_authentication: false,
+	user: "",
+	pass: "",
+}
 
 exports.emailer = {
 	send: function(template, mailOptions, templateOptions) {
@@ -19,16 +27,17 @@ exports.emailer = {
 				k = keys[i];
 				if (!mailOptions.hasOwnProperty(k)) mailOptions[k] = config.mailOptions[k]
 			}
-
-			console.log('[SENDING MAIL]', sys.inspect(mailOptions));
-
-			// Only send mails in production
+			console.log('[SENDING MAIL]' + sys.inspect(mailOptions));
 			//if (server.settings.env == 'production') {
-				//mailer.send(mailOptions, function(err, result) {
-					//if (err) {
-						//console.log(err);
-					//}
-				//});
+                nodemailer.send_mail({
+                    sender: mailOptions.from,
+                    to: mailOptions.to,
+                    subject: mailOptions.subject,
+                    html: mailOptions.body,
+                },
+                function(error, success) {
+                    console.log("emailer module - Message " + (success ? "sent": "failed"));
+                });
 			//}
 		});
 	},

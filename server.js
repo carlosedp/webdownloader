@@ -1,7 +1,10 @@
 // Built-in libraries
+//var log4js = require('log4js')();
+//Added local module until npm is updated
+var log4js = require('./deps/log4js/lib/log4js')();
 var express = require('express');
 var csrf = require('express-csrf');
-var cluster = require('cluster');
+//var cluster = require('cluster');
 var connect = require('connect');
 var sys = require('sys');
 var crypto = require('crypto');
@@ -20,10 +23,27 @@ var downloader = require('./downloader');
 var models = require('./models');
 var emailer = require('./emailer').emailer;
 
+// Log configuration
+log4js.addAppender(log4js.fileAppender('./logs/express.log'), 'express');
+log4js.addAppender(log4js.fileAppender('./logs/application.log'), 'application');
+
+var consoleLogger = log4js.getLogger('console');
+var expressFileLogger = log4js.getLogger('express');
+var appLogger = log4js.getLogger('console');
+//var appLogger = log4js.getLogger('application');
+var expressLogFormat = '\x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :response-time ms'
+//consoleLogger.setLevel('INFO');
+//appLogger.setLevel('INFO');
+//expressFileLogger.setLevel('INFO');
+// Create Server
 var server = express.createServer();
 
 // Dev environment
 server.configure('development', function() {
+	server.use(log4js.connectLogger(consoleLogger, {
+		level: log4js.levels.INFO,
+		format: expressLogFormat,
+	}));
 	server.set('db-name', 'webdownloader-dev');
 	server.use(express.errorHandler({
 		showStack: true,
@@ -33,6 +53,10 @@ server.configure('development', function() {
 
 // Configure production environment
 server.configure('production', function() {
+	server.use(log4js.connectLogger(expressFileLogger, {
+		level: log4js.levels.INFO,
+		format: expressLogFormat,
+	}));
 	server.set('db-name', 'webdownloader-prod');
 	server.use(express.errorHandler());
 });
@@ -51,9 +75,6 @@ server.configure(function() {
 			host: config.DBserverAddress,
 			db: server.set('db-name')
 		})
-	}));
-	server.use(express.logger({
-		format: '[:date] \x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :response-time ms'
 	}));
 	server.helpers(require('./helpers.js').helpers);
 	server.dynamicHelpers(require('./helpers.js').dynamicHelpers);
@@ -180,6 +201,7 @@ Downloads:
 |POST     | /downloads/         | Submits a new download
 |GET      | /downloads/:id      | Returns the download info page
 |GET      | /downloads/del/:id  | Delete the download
+|GET      | /downloads/mail/:id | Mail the download
 ---------------------------------------------------------------------------------------
 */
 
@@ -267,7 +289,7 @@ server.post('/user', function(req, res) {
 	function userSaveFailed(err) {
 		req.flash('error', 'Account creation failed.');
 		// TODO indicate failed fields
-		console.log('Errors: ' + err);
+		appLogger.error('Errors: ' + err);
 		res.render('user/new', {
 			user: user
 		});
@@ -317,7 +339,7 @@ server.put('/user', loadUser, function(req, res) {
 
 			function userSaveFailed(err, msg) {
 				req.flash('error', 'User update failed. ' + msg);
-				console.log('Errors: ' + err + 'Err msg: ' + msg);
+				appLogger.error('Errors: ' + err + 'Err msg: ' + msg);
 				// TODO indicate failed fields
 				res.redirect('/user');
 			}
@@ -355,33 +377,36 @@ server.post('/downloads', loadUser, form(validate('url').required().isUrl('The d
 			url: req.form.url
 		},
 		function(err, d) {
-            if (d) {
-                // If Download exists
-                if (d.users.indexOf(req.currentUser.id) != - 1) {
-                    // User already have this download
+			if (d) {
+				// If Download exists
+				appLogger.debug('Download does exists');
+				if (d.users.indexOf(req.currentUser.id) != - 1) {
+					// User already have this download
 					req.flash('error', 'Download already exists.');
-                } else {
-                    // Just push this user into download users
-					console.log("Download already exists, pushing user:", "into file", req.currentUser.email, d.url);
+					appLogger.debug('Download already exists for this user.');
+				} else {
+					// Just push this user into download users
+					appLogger.debug('Download already exists, pushing user: ' + req.currentUser.email + ' into file ' + d.url);
 					d.users.push(req.currentUser.id);
-                    emailer.sendDownload(req.currentUser, d);
+					emailer.sendDownload(req.currentUser, d);
 				}
             } else {
-                // Download does not exist
+				appLogger.debug('Download does not exist');
+				// Download does not exist
 				var d = new Download({
 					url: req.body.url
 				});
 				d.users.push(req.currentUser.id);
-				console.log('Download file:', d.url);
-                downloader.downloadFile(d, req.currentUser.id);
+				appLogger.info('Download file: ' + d.url);
+				downloader.downloadFile(d, req.currentUser.id);
 			}
-		d.save(function(err) {
-			if (err) console.log("server.js Download - Error saving download: " + err);
-		});
-		req.flash('success', 'Download for the file ' + d.url + ' scheduled.');
+			d.save(function(err) {
+				if (err) appLogger.error('server.js Download - Error saving download: ' + err);
+				req.flash('success', 'Download for the file ' + d.url + ' scheduled.');
+                res.redirect('/downloads/');
+			});
 		});
 	}
-	res.redirect('/downloads/');
 });
 
 // Returns the download info page
@@ -398,17 +423,24 @@ server.get('/downloads/del/:id', loadUser, function(req, res) {
 				oldusers.splice(dl.users.indexOf(req.currentUser.id), 1);
 				dl.users = oldusers;
 				dl.save(function(err) {
-					if (err) console.log('server.js New Download - Error saving download: ' + err);
+					if (err) appLogger.error('server.js New Download - Error saving download: ' + err);
 				});
 			} else {
 				dl.remove();
 			}
 		} else {
-			console.log('Download does not exist. ' + err);
+			appLogger.info('Download does not exist. ' + err);
 		}
 	});
 	res.redirect('/downloads/');
 });
+
+// Delete the download
+server.get('/downloads/mail/:id', loadUser, function(req, res) {
+    //TODO
+	res.redirect('/downloads/');
+});
+
 
 //////////////////// Error routes ////////////////////
 //A Route for Creating a 500 Error (Useful to keep around)
@@ -423,12 +455,12 @@ server.get('/*', function(req, res) {
 
 //////////////////// Run Server ////////////////////
 process.on('uncaughtException', function(err) {
-	console.log(err);
+	appLogger.errorn(err);
 });
 
 if (!module.parent) {
 	//cluster(server).set('workers', 1).use(cluster.reload()).use(cluster.debug()).listen(8000);
 	server.listen(config.serverPort);
-	console.log("Express server listening on port %d, environment: %s", server.address().port, server.settings.env);
+	appLogger.info('Express server listening on port ' + server.address().port + ' , environment: ' + server.settings.env);
 }
 

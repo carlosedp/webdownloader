@@ -306,11 +306,10 @@ div#downloads {
         li.date {
 
         }
-        li.source {
-            font-size: 0.7em;
+        #icons {
+            float: right;      
         }
         li.remove {
-            float: right;
             text-align: right;
             img {
                 cursor: pointer;
@@ -318,6 +317,15 @@ div#downloads {
                 vertical-align: text-top;
             }
         }
+        li.mail {
+            text-align: right;
+            img {
+                cursor: pointer;
+                padding-right: 5px;
+                vertical-align: text-top;
+            }
+        }
+
     }
 }
 

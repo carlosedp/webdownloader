@@ -4,15 +4,17 @@ div#downloads
     ul
       li.file 
         span File: 
-        a(href=dl.localurl) #{dl.filename}
+        a(href=dl.url) #{dl.filename}
       li.size 
         span Size: 
         #{dl.filesize}
       li.date 
         span Download Date: 
         #{dl.date.getDate()}/#{dl.date.getMonth()}/#{dl.date.getFullYear()}
-      li.source 
-        a(href=dl.url) Source 
-      li.remove
-        a(href='/downloads/del/'+dl._id, onClick="return confirm('Are you sure you want to remove this download?')")
-          img(src='/images/delete.png', width='17', height='17', alt='Remove download')
+      #icons
+        li.mail
+          a(href='/downloads/mail/'+dl._id, onClick="return confirm('Send this file attached to email?')")
+            img(src='/images/mail_send.png', width='19', height='19', alt='Mail file')
+        li.remove
+          a(href='/downloads/del/'+dl._id, onClick="return confirm('Are you sure you want to remove this download?')")
+            img(src='/images/delete.png', width='17', height='17', alt='Remove download')
