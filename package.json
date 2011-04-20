@@ -4,24 +4,20 @@
   "version": "0.0.1",
   "homepage": "http://???.com",
   "author": "Carlos E. de Paula [me@carlosedp.com]",
-  "directories": {
-  },
-  "engines": {
-    "node": ">= 0.4.4"
-  },
+  "private": true,
   "dependencies": {
-    "cluster": "0.5.2",
-    "connect-mongo": "0.1.1",
-    "express": "2.1.1",
-    "express-csrf": "0.2.0",
-    "express-messages": "0.0.1",
-    "express-form": "0.5.3",
-    "jade": "0.10.1",
-    "mailer": "0.4.52",
-    "mongoose": "1.1.16",
-    "node-gravatar": "1.0.0",
-    "node-dev": ">=0.0.6",
-    "mailer": ">=0.4.52",
-  }
+    "express": "2.x",
+    "cluster": ">= 0.5",
+    "connect-mongo": ">= 0.1.1",
+    "express-csrf": ">= 0.2.0",
+    "express-messages": ">= 0.0.1",
+    "express-form": ">= 0.5.3",
+    "jade": ">= 0.10.1",
+    "mongoose": ">= 1.1.16",
+    "node-gravatar": ">= 1.0.0",
+    "node-dev": ">= 0.0.6",
+    "mailer": ">= 0.4.52"
+  },
+  "engines": { "node": ">= 0.4.4" }
 }
 

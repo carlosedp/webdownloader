@@ -32,9 +32,12 @@ var expressFileLogger = log4js.getLogger('express');
 var appLogger = log4js.getLogger('console');
 //var appLogger = log4js.getLogger('application');
 var expressLogFormat = '\x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :response-time ms'
+    
+// Set logger level threshold   
 //consoleLogger.setLevel('INFO');
 //appLogger.setLevel('INFO');
 //expressFileLogger.setLevel('INFO');
+
 // Create Server
 var server = express.createServer();
 
@@ -388,9 +391,9 @@ server.post('/downloads', loadUser, form(validate('url').required().isUrl('The d
 					// Just push this user into download users
 					appLogger.debug('Download already exists, pushing user: ' + req.currentUser.email + ' into file ' + d.url);
 					d.users.push(req.currentUser.id);
-					emailer.sendDownload(req.currentUser, d);
+					emailer.sendDownloadNotify(req.currentUser, d);
 				}
-            } else {
+			} else {
 				appLogger.debug('Download does not exist');
 				// Download does not exist
 				var d = new Download({
@@ -403,7 +406,7 @@ server.post('/downloads', loadUser, form(validate('url').required().isUrl('The d
 			d.save(function(err) {
 				if (err) appLogger.error('server.js Download - Error saving download: ' + err);
 				req.flash('success', 'Download for the file ' + d.url + ' scheduled.');
-                res.redirect('/downloads/');
+				res.redirect('/downloads/');
 			});
 		});
 	}
@@ -435,12 +438,14 @@ server.get('/downloads/del/:id', loadUser, function(req, res) {
 	res.redirect('/downloads/');
 });
 
-// Delete the download
+// Mail the download
 server.get('/downloads/mail/:id', loadUser, function(req, res) {
-    //TODO
+	Download.findById(req.params.id, function(err, dl) {
+		mailer.sendDownload(req.currentUser, dl);
+	});
+	req.flash('info', 'Your download will be sent attached via email.');
 	res.redirect('/downloads/');
 });
-
 
 //////////////////// Error routes ////////////////////
 //A Route for Creating a 500 Error (Useful to keep around)

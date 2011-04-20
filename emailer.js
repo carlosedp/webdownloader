@@ -1,8 +1,10 @@
 ﻿var sys = require('sys');
+var fs = require("fs");
 var path = require('path');
 var jade = require('jade');
 // Temporarily load module from local deps until npm is fixed
 var nodemailer = require('./deps/nodemailer/lib/mail');
+//var nodemailer = require('nodemailer');
 var config = require('./config');
 
 nodemailer.SMTP = {
@@ -29,15 +31,15 @@ exports.emailer = {
 			}
 			console.log('[SENDING MAIL]' + sys.inspect(mailOptions));
 			//if (server.settings.env == 'production') {
-                nodemailer.send_mail({
-                    sender: mailOptions.from,
-                    to: mailOptions.to,
-                    subject: mailOptions.subject,
-                    html: mailOptions.body,
-                },
-                function(error, success) {
-                    console.log("emailer module - Message " + (success ? "sent": "failed"));
-                });
+			nodemailer.send_mail({
+				sender: mailOptions.from,
+				to: mailOptions.to,
+				subject: mailOptions.subject,
+				html: mailOptions.body,
+			},
+			function(error, success) {
+				console.log("emailer module - Message " + (success ? "sent": "failed"));
+			});
 			//}
 		});
 	},
@@ -53,10 +55,10 @@ exports.emailer = {
 			}
 		});
 	},
-	sendDownload: function(user, download) {
-		this.send('download.jade', {
+	sendDownloadNotify: function(user, download) {
+		this.send('downloadNotify.jade', {
 			to: user.email,
-			subject: 'Downloadit4me - Grab your download'
+			subject: 'Downloadit4me - Grab your download!'
 		},
 		{
 			locals: {
@@ -65,5 +67,27 @@ exports.emailer = {
 			}
 		});
 	},
+	sendDownload: function(user, download) {
+		fs.readFile(download.localpath, 'binary', function(err, data) {
+			if (err) throw err;
+			this.send('download.jade', {
+				to: user.email,
+				subject: 'Downloadit4me - Here is your download!',
+				attachments: [{
+					filename: download.filename,
+					contents: new Buffer(data, "binary"),
+				}],
+			},
+			{
+				locals: {
+					user: user,
+					download: download,
+				},
+			});
+
+		});
+
+	},
+
 };
 
