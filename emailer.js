@@ -6,6 +6,7 @@ var jade = require('jade');
 var nodemailer = require('./deps/nodemailer/lib/mail');
 //var nodemailer = require('nodemailer');
 var config = require('./config');
+var appLogger = require('./logger').appLogger;
 
 nodemailer.SMTP = {
 	host: config.mailOptions.host,
@@ -29,16 +30,20 @@ exports.emailer = {
 				k = keys[i];
 				if (!mailOptions.hasOwnProperty(k)) mailOptions[k] = config.mailOptions[k]
 			}
-			console.log('[SENDING MAIL]' + sys.inspect(mailOptions));
-			//if (server.settings.env == 'production') {
+			appLogger.info('[SENDING MAIL]' + sys.inspect(mailOptions));
+			//if (server.settings.env == 'production') { //TODO
 			nodemailer.send_mail({
 				sender: mailOptions.from,
 				to: mailOptions.to,
 				subject: mailOptions.subject,
 				html: mailOptions.body,
 			},
-			function(error, success) {
-				console.log("emailer module - Message " + (success ? "sent": "failed"));
+            function(error, success) {
+                if (error) {
+                    appLogger.error('[SENDING MAIL] - Message failed. ' + error);
+                } else {
+                    appLogger.info('[SENDING MAIL] - Message sent.');
+                }
 			});
 			//}
 		});

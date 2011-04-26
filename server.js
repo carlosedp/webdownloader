@@ -1,7 +1,4 @@
 // Built-in libraries
-//var log4js = require('log4js')();
-//Added local module until npm is updated
-var log4js = require('./deps/log4js/lib/log4js')();
 var express = require('express');
 var csrf = require('express-csrf');
 //var cluster = require('cluster');
@@ -23,21 +20,12 @@ var downloader = require('./downloader');
 var models = require('./models');
 var emailer = require('./emailer').emailer;
 
-// Log configuration
-log4js.addAppender(log4js.fileAppender('./logs/express.log'), 'express');
-log4js.addAppender(log4js.fileAppender('./logs/application.log'), 'application');
-
-var consoleLogger = log4js.getLogger('console');
-var expressFileLogger = log4js.getLogger('express');
-var appLogger = log4js.getLogger('console');
-//var appLogger = log4js.getLogger('application');
+var log4js = require('./logger').log4js;
+var consoleLogger = require('./logger').consoleLogger;
+var appLogger = require('./logger').appLogger;
+var expressFileLogger = require('./logger').expressFileLogger;
 var expressLogFormat = '\x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :response-time ms'
-    
-// Set logger level threshold   
-//consoleLogger.setLevel('INFO');
-//appLogger.setLevel('INFO');
-//expressFileLogger.setLevel('INFO');
-
+ 
 // Create Server
 var server = express.createServer();
 
@@ -401,7 +389,7 @@ server.post('/downloads', loadUser, form(validate('url').required().isUrl('The d
 				});
 				d.users.push(req.currentUser.id);
 				appLogger.info('Download file: ' + d.url);
-				downloader.downloadFile(d, req.currentUser.id);
+				downloader.scheduleDownload(d, req.currentUser.id);
 			}
 			d.save(function(err) {
 				if (err) appLogger.error('server.js Download - Error saving download: ' + err);
