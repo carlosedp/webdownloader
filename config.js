@@ -8,6 +8,7 @@ exports.serverAddress = 'http://localhost:' + this.serverPort;
 
 exports.downloadDirSuffix = '/downloadedFiles/';
 exports.downloadDir = __dirname + this.downloadDirSuffix;
+exports.fileSizeLimit = 100000000;
 
 exports.mailOptions = {
 	host: 'localhost',

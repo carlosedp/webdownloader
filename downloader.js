@@ -38,9 +38,9 @@ var checkDownloadSize = function(options, d, callback) {
 	var request = http.request(options);
 	request.on('response', function(response) {
 		var filesize = response.headers['content-length'];
-		if (filesize >= 100000 || response.statusCode != 200) {
+		if (filesize >= config.fileSizeLimit || response.statusCode != 200) {
 			appLogger.debug("Download cancelled. File too big or is a redirect.");
-			appLogger.debug(response);
+			appLogger.debug(sys.inspect(response));
 			callback(0);
 		} else {
 			appLogger.debug("Download will continue.");
