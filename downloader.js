@@ -5,7 +5,6 @@ var config = require('./config');
 var emailer = require('./emailer').emailer;
 var appLogger = require('./logger').appLogger;
 
-
 var downloadDirSuffix = config.downloadDirSuffix;
 var downloadDir = config.downloadDir;
 
@@ -21,36 +20,56 @@ var scheduleDownload = function(d, user) {
 		port: 80,
 		path: pathname,
 		method: 'HEAD',
+		maxRedirects: 4,
+		_redirectsFollowed: 0,
+		followRedirect: 1,
 	};
 
-	checkDownloadSize(options, d, function(result) {
-		if (result) {
-			downloadFile(options, d);
-			d.save(function(err) {
-				if (err) appLogger.error("downloader.js - Error saving download:" + err);
-			});
-		}
-	});
-
+	checkDownloadSize(options, d, checkDownloadCallback);
 }
+
+var checkDownloadCallback = function(result, options, d) {
+	if (result) {
+		downloadFile(options, d);
+		d.save(function(err) {
+			if (err) appLogger.error("downloader.js - Error saving download:" + err);
+		});
+	}
+}
+
 var checkDownloadSize = function(options, d, callback) {
 	appLogger.debug("Checking file size for: " + d.filename);
 	var request = http.request(options);
 	request.on('response', function(response) {
-		var filesize = response.headers['content-length'];
-		if (filesize >= config.fileSizeLimit || response.statusCode != 200) {
-			appLogger.debug("Download cancelled. File too big or is a redirect.");
-			appLogger.debug(sys.inspect(response));
-			callback(0);
+		if (response.statusCode >= 300 && response.statusCode < 400 && options.followRedirect && response.headers['location']) {
+			// Follow redirect and try again
+			options._redirectsFollowed += 1;
+			if (options._redirectsFollowed >= options.maxRedirects) {
+				appLogger.error("Exceeded maxRedirects. Probably stuck in a redirect loop.");
+				callback(0, options, d);
+			}
+			options.host = url.parse(response.headers['location']).hostname;
+			options.path = url.parse(response.headers['location']).pathname;
+			// Check again the redirected URL
+			checkDownloadSize(options, d, checkDownloadCallback);
 		} else {
-			appLogger.debug("Download will continue.");
-			d.filesize = filesize;
-			callback(1);
+			// Check file size
+			var filesize = response.headers['content-length'];
+			if (filesize >= config.fileSizeLimit || response.statusCode != 200) {
+				appLogger.debug("Download cancelled. File too big or is a redirect.");
+				appLogger.debug(sys.inspect(response));
+				callback(0, options, d);
+			} else {
+				appLogger.debug("Download will continue.");
+				d.filesize = filesize;
+				callback(1, options, d);
+			}
 		}
 	});
 	request.on('error', function(err) {
 		appLogger.error('[FILE DOWNLOAD ERROR - HEADER]' + err);
 	});
+
 	request.end();
 }
 
@@ -78,9 +97,9 @@ var downloadFile = function(options, d) {
 			emailer.sendDownload(user, d);
 		});
 	});
-    dlrequest.on('error', function(err) {
-        appLogger.error('[FILE DOWNLOAD ERROR - DATA]' + err);
-    });
+	dlrequest.on('error', function(err) {
+		appLogger.error('[FILE DOWNLOAD ERROR - DATA]' + err);
+	});
 }
 
 exports.scheduleDownload = scheduleDownload;
