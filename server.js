@@ -13,6 +13,7 @@ var gravatar = require('node-gravatar');
 var form = require('express-form');
 var filter = form.filter;
 var validate = form.validate;
+var expressmessages = require('express-messages');
 
 // Custom libraries
 var config = require('./config');
@@ -73,7 +74,7 @@ server.configure(function() {
 		csrf: csrf.token
 	});
 	server.dynamicHelpers({
-		messages: require('express-messages')
+		messages: expressmessages
 	});
 	server.use(express.favicon());
 	server.use(csrf.check());

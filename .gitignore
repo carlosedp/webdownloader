@@ -1,3 +1,5 @@
+node_modules/*
+deps/*
 downloadedFiles/*
 static/.sass-cache/*
 static/stylesheets/*

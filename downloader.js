@@ -1,6 +1,7 @@
 var http = require("http");
 var url = require("url");
 var fs = require("fs");
+var sys = require('sys');
 var config = require('./config');
 var emailer = require('./emailer').emailer;
 var appLogger = require('./logger').appLogger;
@@ -39,14 +40,17 @@ var checkDownloadCallback = function(result, options, d) {
 
 var checkDownloadSize = function(options, d, callback) {
 	appLogger.debug("Checking file size for: " + d.filename);
+    appLogger.debug("Debug " + sys.inspect(options));
 	var request = http.request(options);
 	request.on('response', function(response) {
 		if (response.statusCode >= 300 && response.statusCode < 400 && options.followRedirect && response.headers['location']) {
 			// Follow redirect and try again
+            appLogger.debug("Following redirect to: " + response.headers['location']);
 			options._redirectsFollowed += 1;
 			if (options._redirectsFollowed >= options.maxRedirects) {
 				appLogger.error("Exceeded maxRedirects. Probably stuck in a redirect loop.");
-				callback(0, options, d);
+                callback(0, options, d);
+                return;
 			}
 			options.host = url.parse(response.headers['location']).hostname;
 			options.path = url.parse(response.headers['location']).pathname;
@@ -55,9 +59,8 @@ var checkDownloadSize = function(options, d, callback) {
 		} else {
 			// Check file size
 			var filesize = response.headers['content-length'];
-			if (filesize >= config.fileSizeLimit || response.statusCode != 200) {
+			if (filesize >= config.fileSizeLimit && (response.statusCode < 200 || response.statusCode >= 300)) {
 				appLogger.debug("Download cancelled. File too big or is a redirect.");
-				appLogger.debug(sys.inspect(response));
 				callback(0, options, d);
 			} else {
 				appLogger.debug("Download will continue.");

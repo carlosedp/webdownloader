@@ -7,17 +7,18 @@
   "private": true,
   "dependencies": {
     "express": "2.x",
-    "cluster": ">= 0.5",
-    "connect-mongo": ">= 0.1.1",
     "express-csrf": ">= 0.2.0",
-    "express-messages": ">= 0.0.1",
-    "express-form": ">= 0.5.3",
-    "jade": ">= 0.10.1",
+    "cluster": ">= 0.5",
+    "connect": ">= 1.4",
     "mongoose": ">= 1.1.16",
+    "connect-mongo": ">= 0.1.1",
     "node-gravatar": ">= 1.0.0",
-    "node-dev": ">= 0.0.6",
-    "mailer": ">= 0.4.52"
+    "express-form": ">= 0.5.3",
+    "express-messages": ">= 0.0.1",
+    "jade": ">= 0.10.1",
+    "mailer": ">= 0.4.52",
+    "log4js": ">= 0.2.5"
   },
-  "engines": { "node": ">= 0.4.4" }
+  "engines": { "node": ">= 0.4.7" }
 }
 
