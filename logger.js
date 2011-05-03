@@ -1,6 +1,4 @@
-﻿//var log4js = require('log4js')();
-//Added local module until npm is updated
-var log4js = require('./deps/log4js/lib/log4js')();
+﻿var log4js = require('log4js')();
 
 // Log configuration
 log4js.addAppender(log4js.fileAppender('./logs/express.log'), 'express');

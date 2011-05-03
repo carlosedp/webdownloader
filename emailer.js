@@ -2,9 +2,7 @@
 var fs = require("fs");
 var path = require('path');
 var jade = require('jade');
-// Temporarily load module from local deps until npm is fixed
-var nodemailer = require('./deps/nodemailer/lib/mail');
-//var nodemailer = require('nodemailer');
+var nodemailer = require('nodemailer');
 var config = require('./config');
 var appLogger = require('./logger').appLogger;
 
