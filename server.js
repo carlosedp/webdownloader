@@ -3,10 +3,10 @@ var express = require('express');
 var csrf = require('express-csrf');
 //var cluster = require('cluster');
 var connect = require('connect');
-var sys = require('sys');
+var util = require('util');
 var crypto = require('crypto');
 var mongoose = require('mongoose');
-var mongoStore = require('connect-mongo');
+//var mongoStore = require('connect-mongodb');
 var gravatar = require('node-gravatar');
 
 // Form validation lib
@@ -26,7 +26,7 @@ var consoleLogger = require('./logger').consoleLogger;
 var appLogger = require('./logger').appLogger;
 var expressFileLogger = require('./logger').expressFileLogger;
 var expressLogFormat = '\x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :response-time ms'
- 
+
 // Create Server
 var server = express.createServer();
 
@@ -62,11 +62,11 @@ server.configure(function() {
 	server.use(express.methodOverride());
 	server.use(express.cookieParser());
 	server.use(express.session({
-		secret: 'verysecret',
-		store: new mongoStore({
-			host: config.DBserverAddress,
-			db: server.set('db-name')
-		})
+		secret: 'verysecret'//,
+		//store: new mongoStore({
+			//host: config.DBserverAddress,
+			//db: server.set('db-name')
+		//})
 	}));
 	server.helpers(require('./helpers.js').helpers);
 	server.dynamicHelpers(require('./helpers.js').dynamicHelpers);
@@ -111,7 +111,7 @@ function NotFound(msg) {
 	Error.call(this, msg);
 	Error.captureStackTrace(this, arguments.callee);
 }
-sys.inherits(NotFound, Error)
+util.inherits(NotFound, Error)
 
 function authenticateFromLoginToken(req, res, next) {
 	var cookie = JSON.parse(req.cookies.logintoken);
@@ -430,7 +430,7 @@ server.get('/downloads/del/:id', loadUser, function(req, res) {
 // Mail the download
 server.get('/downloads/mail/:id', loadUser, function(req, res) {
 	Download.findById(req.params.id, function(err, dl) {
-		mailer.sendDownload(req.currentUser, dl);
+		emailer.sendDownload(req.currentUser, dl);
 	});
 	req.flash('info', 'Your download will be sent attached via email.');
 	res.redirect('/downloads/');

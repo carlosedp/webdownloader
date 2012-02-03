@@ -1,7 +1,7 @@
 var http = require("http");
 var url = require("url");
 var fs = require("fs");
-var sys = require('sys');
+var util = require('util');
 var config = require('./config');
 var emailer = require('./emailer').emailer;
 var appLogger = require('./logger').appLogger;
@@ -40,7 +40,7 @@ var checkDownloadCallback = function(result, options, d) {
 
 var checkDownloadSize = function(options, d, callback) {
 	appLogger.debug("Checking file size for: " + d.filename);
-    appLogger.debug("Debug " + sys.inspect(options));
+    appLogger.debug("Debug " + util.inspect(options));
 	var request = http.request(options);
 	request.on('response', function(response) {
 		if (response.statusCode >= 300 && response.statusCode < 400 && options.followRedirect && response.headers['location']) {

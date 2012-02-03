@@ -1,12 +1,12 @@
-﻿var sys = require('sys');
+var util = require('util');
 var fs = require("fs");
 var path = require('path');
 var jade = require('jade');
-var nodemailer = require('nodemailer');
+var mailer = require('mailer');
 var config = require('./config');
 var appLogger = require('./logger').appLogger;
 
-nodemailer.SMTP = {
+mailer.SMTP = {
 	host: config.mailOptions.host,
 	port: config.mailOptions.port,
 	use_authentication: false,
@@ -28,9 +28,9 @@ exports.emailer = {
 				k = keys[i];
 				if (!mailOptions.hasOwnProperty(k)) mailOptions[k] = config.mailOptions[k]
 			}
-			appLogger.info('[SENDING MAIL]' + sys.inspect(mailOptions));
+			appLogger.info('[SENDING MAIL]' + util.inspect(mailOptions));
 			//if (server.settings.env == 'production') { //TODO
-			nodemailer.send_mail({
+			mailer.send_mail({
 				sender: mailOptions.from,
 				to: mailOptions.to,
 				subject: mailOptions.subject,
@@ -93,4 +93,5 @@ exports.emailer = {
 	},
 
 };
+
 

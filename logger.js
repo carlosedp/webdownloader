@@ -1,4 +1,4 @@
-﻿var log4js = require('log4js')();
+var log4js = require('log4js');
 
 // Log configuration
 log4js.addAppender(log4js.fileAppender('./logs/express.log'), 'express');
@@ -20,4 +20,5 @@ exports.log4js = log4js;
 exports.consoleLogger = consoleLogger;
 exports.expressFileLogger = expressFileLogger;
 exports.appLogger = appLogger;
+
 

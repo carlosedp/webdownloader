@@ -12,7 +12,7 @@ exports.fileSizeLimit = 100000000;
 
 exports.mailOptions = {
 	host: 'localhost',
-	port: '25',
+	port: '1025',
 	from: 'mailer@downloadit4.me',
 };
 
