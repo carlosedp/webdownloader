@@ -29,7 +29,7 @@ exports.emailer = {
 				if (!mailOptions.hasOwnProperty(k)) mailOptions[k] = config.mailOptions[k]
 			}
 			appLogger.info('[SENDING MAIL]' + util.inspect(mailOptions));
-			//if (server.settings.env == 'production') { //TODO
+            if (server.settings.env == 'production') { //TODO
 			mailer.send_mail({
 				sender: mailOptions.from,
 				to: mailOptions.to,
@@ -43,7 +43,7 @@ exports.emailer = {
                     appLogger.info('[SENDING MAIL] - Message sent.');
                 }
 			});
-			//}
+            }
 		});
 	},
 

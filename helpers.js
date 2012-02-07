@@ -16,6 +16,9 @@ exports.dynamicHelpers = {
 				return 0;
 			}
 		}
+	},
+	token: function(req, res) {
+		return req.session._csrf;
 	}
 };
 
