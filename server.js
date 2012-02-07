@@ -1,6 +1,5 @@
 // Built-in libraries
 var express = require('express');
-var csrf = require('express-csrf');
 //var cluster = require('cluster');
 var connect = require('connect');
 var util = require('util');
@@ -71,13 +70,10 @@ server.configure(function() {
 	server.helpers(require('./helpers.js').helpers);
 	server.dynamicHelpers(require('./helpers.js').dynamicHelpers);
 	server.dynamicHelpers({
-		csrf: csrf.token
-	});
-	server.dynamicHelpers({
 		messages: expressmessages
 	});
 	server.use(express.favicon());
-	server.use(csrf.check());
+	server.use(express.csrf());
 	server.use(express.static(config.pub));
 	server.use(server.router);
 });

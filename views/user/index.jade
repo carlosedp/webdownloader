@@ -10,7 +10,7 @@ div.gravatar
     small (based on your email address)
 br
 form(method='post', action='/user')
-  input(type='hidden', name='csrf', value=csrf)
+  input(type='hidden', name='_csrf', value=token)
   input(type="hidden", name="_method", value="put")
   div.field
     label(for="user[name]") Name:

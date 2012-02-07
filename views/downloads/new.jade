@@ -1,5 +1,5 @@
 form(method="post", action="/downloads")
-  input(type='hidden', name='csrf', value=csrf)
+  input(type='hidden', name='_csrf', value=token)
   p Enter the file you want to download:
   div.field 
     label(for="url") Download link:
